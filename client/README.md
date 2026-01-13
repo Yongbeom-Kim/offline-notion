@@ -11,6 +11,16 @@ pnpm install
 pnpm dev
 ```
 
+## Development Setup
+
+After cloning the repository, run the setup command to configure the precommit hook:
+
+```bash
+make setup
+```
+
+This will install the precommit hook that runs linting and formatting checks before each commit.
+
 ## Building For Production
 
 To build this application for production:
