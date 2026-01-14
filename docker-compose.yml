@@ -11,6 +11,17 @@ services:
       - NODE_ENV=production
     depends_on:
       - server
+      - backend
+
+  backend:
+    build:
+      context: ./server
+      target: prod
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
 
   # Authentik Services
   postgresql:

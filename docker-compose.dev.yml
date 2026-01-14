@@ -13,7 +13,16 @@ services:
       - NODE_ENV=development
     depends_on:
       - server
-  
+      - backend
+
+  backend:
+    build:
+      context: ./server
+      target: dev
+    volumes:
+      - ./server:/app
+      - /app/tmp
+
   # Authentik overrides
   postgresql:
     volumes:
