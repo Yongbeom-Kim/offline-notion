@@ -1,0 +1,6 @@
+.output
+.tanstack
+.vscode
+node_modules
+biome.json
+README.md

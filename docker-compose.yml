@@ -1,4 +1,16 @@
 services:
+  
+  client:
+    build:
+      context: ./client
+      target: prod
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - server
 
   # Authentik Services
   postgresql:
@@ -62,6 +74,7 @@ services:
     - ./media:/media
     - ./certs:/certs
     - ./custom-templates:/templates
+
 volumes:
   database:
     driver: local

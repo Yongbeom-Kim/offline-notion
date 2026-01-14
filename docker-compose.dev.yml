@@ -1,0 +1,24 @@
+services:
+  
+  client:
+    build:
+      context: ./client
+      target: dev
+    volumes:
+      - ./client:/app
+      - /app/node_modules # keep container node_modules, don't use host
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - server
+  
+  # Authentik overrides
+  postgresql:
+    volumes:
+    - database_dev:/var/lib/postgresql/data
+
+volumes:
+  database_dev:
+    driver: local
