@@ -10,6 +10,12 @@ gen_env:
 		echo "AUTHENTIK_SECRET_KEY=$(openssl rand -base64 60 | tr -d '\n')" >> .env; \
 	fi
 
+gen_test_env:
+	if [ ! -f .env ]; then \
+		echo "PG_PASS=12345" >> .env; \
+		echo "AUTHENTIK_SECRET_KEY=12345" >> .env; \
+	fi
+
 start:
 	docker compose -p "$(PROJECT_NAME)_prod" -f docker-compose.yml up --build
 

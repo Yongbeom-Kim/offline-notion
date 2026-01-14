@@ -16,7 +16,7 @@ jobs:
       - name: Install OpenSSL
         run: sudo apt-get update && sudo apt-get install -y openssl
       - name: Generate .env
-        run: make gen_env
+        run: make gen_test_env
       - name: Build (prod)
         run: docker compose -f docker-compose.yml build
 
@@ -29,6 +29,6 @@ jobs:
       - name: Install OpenSSL
         run: sudo apt-get update && sudo apt-get install -y openssl
       - name: Generate .env
-        run: make gen_env
+        run: make gen_test_env
       - name: Build (dev)
         run: docker compose -f docker-compose.yml -f docker-compose.dev.yml build
