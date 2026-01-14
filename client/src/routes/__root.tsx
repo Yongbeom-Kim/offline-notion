@@ -4,6 +4,7 @@ import {
 	HeadContent,
 	Scripts,
 } from "@tanstack/react-router";
+import { CssBaseline, CssVarsProvider } from "@mui/joy";
 import Header from "../components/Header";
 import appCss from "../styles.css?url";
 
@@ -56,8 +57,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
-				<Header />
-				{children}
+				<CssVarsProvider defaultMode="light">
+					<CssBaseline />
+					<Header />
+					{children}
+				</CssVarsProvider>
 				<Scripts />
 			</body>
 		</html>
