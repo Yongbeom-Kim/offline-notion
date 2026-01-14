@@ -12,6 +12,11 @@ COPY . .
 
 CMD ["pnpm", "run", "dev"]
 
+FROM dev AS build
+
+RUN pnpm run build
+
+
 FROM node:20-alpine as prod
 
 RUN adduser -S appuser
@@ -19,9 +24,9 @@ RUN adduser -S appuser
 WORKDIR /app
 EXPOSE 3000
 
-COPY --from=dev /app/package.json ./package.json
-COPY --from=dev /app/node_modules ./node_modules
-COPY --from=dev /app/.output ./.output
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/.output ./.output
 
 RUN chown -R appuser /app
 

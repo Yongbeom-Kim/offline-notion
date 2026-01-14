@@ -8,19 +8,23 @@ on:
   
 jobs:
   run:
-    name: 'Build & Deploy Frontend'
+    name: 'Check Build (Prod)'
     runs-on: 'ubuntu-latest'
     steps:
     
     - name: Checkout
       uses: actions/checkout@v6.0.1
       
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 20
-        
-    - name: Install CLI Dependencies
-      run: npm i -g pnpm
+    - name: Build (prod)
+      run: docker compose build -f docker-compose.yml
+      
+  run:
+    name: 'Check Build (Dev)'
+    runs-on: 'ubuntu-latest'
+    steps:
     
-    - name: Install & Build
-      run: cd client && pnpm install && pnpm run build
+    - name: Checkout
+      uses: actions/checkout@v6.0.1
+      
+    - name: Build (dev)
+      run: docker compose build -f docker-compose.yml -f docker-compose.dev.yml
