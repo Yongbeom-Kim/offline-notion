@@ -5,26 +5,22 @@ on:
       - 'main'
   workflow_dispatch:
   repository_dispatch:
-  
+
 jobs:
-  run:
+  build-prod:
     name: 'Check Build (Prod)'
     runs-on: 'ubuntu-latest'
     steps:
-    
-    - name: Checkout
-      uses: actions/checkout@v6.0.1
-      
-    - name: Build (prod)
-      run: docker compose build -f docker-compose.yml
-      
-  run:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Build (prod)
+        run: docker compose -f docker-compose.yml build
+
+  build-dev:
     name: 'Check Build (Dev)'
     runs-on: 'ubuntu-latest'
     steps:
-    
-    - name: Checkout
-      uses: actions/checkout@v6.0.1
-      
-    - name: Build (dev)
-      run: docker compose build -f docker-compose.yml -f docker-compose.dev.yml
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Build (dev)
+        run: docker compose -f docker-compose.yml -f docker-compose.dev.yml build
