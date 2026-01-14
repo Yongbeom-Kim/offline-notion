@@ -1,5 +1,7 @@
 #!/bin/bash
 
-cd client && pnpm fix
+BASE_DIR="$(git rev-parse --show-toplevel)"
 
-cd server && go fmt ./...
+cd "$BASE_DIR/client" && pnpm fix
+
+cd "$BASE_DIR/server" && go fmt ./...
