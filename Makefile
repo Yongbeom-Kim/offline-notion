@@ -5,8 +5,10 @@ setup:
 	sudo chmod a+x .git/hooks -R
 
 gen_env:
-	echo "PG_PASS=$(openssl rand -base64 36 | tr -d '\n')" >> .env
-	echo "AUTHENTIK_SECRET_KEY=$(openssl rand -base64 60 | tr -d '\n')" >> .env
+	if [ ! -f .env ]; then \
+		echo "PG_PASS=$(openssl rand -base64 36 | tr -d '\n')" >> .env; \
+		echo "AUTHENTIK_SECRET_KEY=$(openssl rand -base64 60 | tr -d '\n')" >> .env; \
+	fi
 
 start:
 	docker compose -p "$(PROJECT_NAME)_prod" -f docker-compose.yml up --build
