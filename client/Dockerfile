@@ -16,7 +16,6 @@ FROM dev AS build
 
 RUN pnpm run build
 
-
 FROM node:20-alpine as prod
 
 RUN adduser -S appuser

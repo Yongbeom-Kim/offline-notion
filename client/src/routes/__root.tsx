@@ -1,3 +1,4 @@
+import { CssBaseline, CssVarsProvider } from "@mui/joy";
 import type { QueryClient } from "@tanstack/react-query";
 import {
 	createRootRouteWithContext,
@@ -56,8 +57,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
-				<Header />
-				{children}
+				<CssVarsProvider defaultMode="light">
+					<CssBaseline />
+					<Header />
+					{children}
+				</CssVarsProvider>
 				<Scripts />
 			</body>
 		</html>

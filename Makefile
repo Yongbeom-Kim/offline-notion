@@ -30,3 +30,6 @@ stop:
 
 stop-dev:
 	docker compose -p "$(PROJECT_NAME)_dev" down
+
+docker-prune:
+	docker system prune -a

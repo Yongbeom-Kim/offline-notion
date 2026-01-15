@@ -1,12 +1,4 @@
-import { ClientOnly, createFileRoute } from "@tanstack/react-router";
-import { BlockNoteEditor } from "../components/editor/BlockNoteEditor";
+import { createFileRoute } from "@tanstack/react-router";
+import { LandingPage } from "@/pages/landing/LandingPage";
 
-export const Route = createFileRoute("/")({ component: App });
-
-function App() {
-	return (
-		<ClientOnly>
-			<BlockNoteEditor />
-		</ClientOnly>
-	);
-}
+export const Route = createFileRoute("/")({ component: LandingPage });

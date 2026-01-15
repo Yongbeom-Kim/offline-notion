@@ -3,27 +3,33 @@ import { useCreateBlockNote } from "@blocknote/react";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 
+import { useEffect, useMemo } from "react";
 import { IndexeddbPersistence } from "y-indexeddb";
 import * as Y from "yjs";
 
-export function BlockNoteEditor() {
-	const doc = new Y.Doc();
-	// TODO: implement new IDB provider for persistence
-	new IndexeddbPersistence("name", doc);
+type BlockNoteEditorProps = { documentId: string };
+
+export function BlockNoteEditor({ documentId }: BlockNoteEditorProps) {
+	const doc = useMemo(() => new Y.Doc(), [documentId]);
+
+	useEffect(() => {
+		const p = new IndexeddbPersistence(`doc-${documentId}`, doc);
+		return () => {
+			p.destroy();
+		};
+	}, [documentId, doc]);
 
 	const editor = useCreateBlockNote({
 		collaboration: {
+			doc,
 			fragment: doc.getXmlFragment("document-store"),
-			user: {
-				name: "My Username",
-				color: "#ff0000",
-			},
+			user: { name: "Offline Notion", color: "#0ea5e9" },
 			showCursorLabels: "activity",
 		},
 	});
 
 	return (
-		<div className="h-screen w-full bg-white">
+		<div className="h-full w-full bg-white">
 			<BlockNoteView editor={editor} theme="light" className="h-full" />
 		</div>
 	);
