@@ -1,5 +1,10 @@
+import { filterSuggestionItems } from "@blocknote/core/extensions";
 import { BlockNoteView } from "@blocknote/mantine";
-import { useCreateBlockNote } from "@blocknote/react";
+import {
+	getDefaultReactSlashMenuItems,
+	SuggestionMenuController,
+	useCreateBlockNote,
+} from "@blocknote/react";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 
@@ -8,8 +13,45 @@ import { IndexeddbPersistence } from "y-indexeddb";
 import * as Y from "yjs";
 import { updateInternalDocumentLinks } from "@/pages/document/utils/document-link-updater";
 import { internalLinkPasteHandler } from "@/pages/document/utils/paste-handler";
+import { EditorDialogProvider, useEditorDialog } from "./slash-commands";
+import { createCustomSlashMenuItems } from "./slash-commands/custom-slash-menu-items";
 
 type BlockNoteEditorProps = { documentId: string };
+
+interface BlockNoteEditorInnerProps {
+	editor: ReturnType<typeof useCreateBlockNote>;
+}
+
+function BlockNoteEditorInner({ editor }: BlockNoteEditorInnerProps) {
+	const { openCreateDocumentDialog, openLinkDocumentDialog } =
+		useEditorDialog();
+
+	const customSlashItems = createCustomSlashMenuItems(editor, {
+		openCreateDocumentDialog,
+		openLinkDocumentDialog,
+	});
+
+	return (
+		<div className="h-full w-full bg-white">
+			<BlockNoteView
+				editor={editor}
+				theme="light"
+				className="h-full"
+				slashMenu={false}
+			>
+				<SuggestionMenuController
+					triggerCharacter="/"
+					getItems={async (query) =>
+						filterSuggestionItems(
+							[...getDefaultReactSlashMenuItems(editor), ...customSlashItems],
+							query,
+						)
+					}
+				/>
+			</BlockNoteView>
+		</div>
+	);
+}
 
 export function BlockNoteEditor({ documentId }: BlockNoteEditorProps) {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: documentId is needed to recreate doc per document
@@ -37,8 +79,8 @@ export function BlockNoteEditor({ documentId }: BlockNoteEditorProps) {
 	}, [documentId, doc, editor]);
 
 	return (
-		<div className="h-full w-full bg-white">
-			<BlockNoteView editor={editor} theme="light" className="h-full" />
-		</div>
+		<EditorDialogProvider>
+			<BlockNoteEditorInner editor={editor} />
+		</EditorDialogProvider>
 	);
 }
