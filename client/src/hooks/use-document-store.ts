@@ -20,7 +20,7 @@ export type DexieDocumentDB = Dexie & {
 
 let dbInstance: DexieDocumentDB | null = null;
 
-const initDocumentMetadataTable = (): DexieDocumentDB | null => {
+const getDocumentMetadataDb = (): DexieDocumentDB | null => {
 	if (typeof window === "undefined") return null;
 	if (dbInstance) {
 		return dbInstance;
@@ -37,7 +37,7 @@ const initDocumentMetadataTable = (): DexieDocumentDB | null => {
 
 export const useDocumentMetadataList = () => {
 	const dexieDbRef = useRef<DexieDocumentDB | null>(
-		initDocumentMetadataTable(),
+		getDocumentMetadataDb(),
 	);
 	const [refreshCounter, setRefreshCounter] = useState(0);
 	const refreshDocumentList = useCallback(() => {
@@ -65,82 +65,70 @@ export const useDocumentMetadataList = () => {
 	};
 };
 
-export const useDocumentStore = () => {
-	const dexieDbRef = useRef<DexieDocumentDB | null>(
-		initDocumentMetadataTable(),
-	);
-
-	const createDocument = async (title: string): Promise<string> => {
-		if (!dexieDbRef.current) {
-			throw new Error("Database is not initialized yet.");
-		}
-		const db = dexieDbRef.current;
-
-		const now = Date.now();
-		const record: DocumentMetadata = {
-			id: uuid_v7(),
-			title: title.trim() || "Untitled document",
-			createdAt: now,
-			updatedAt: now,
-			deletedAt: null,
-			isActive: 1,
-		};
-
-		return await db.transaction("rw", db.document_metadata, async () => {
-			return await db.document_metadata.add(record);
-		});
+export const createDocumentMetadata = async (
+	title: string,
+): Promise<string> => {
+	const db = getDocumentMetadataDb();
+	if (!db) {
+		throw new Error("IndexedDB is not available in this environment.");
+	}
+	const now = Date.now();
+	const record: DocumentMetadata = {
+		id: uuid_v7(),
+		title: title.trim() || "Untitled document",
+		createdAt: now,
+		updatedAt: now,
+		deletedAt: null,
+		isActive: 1,
 	};
 
-	const updateDocument = async (
-		id: string,
-		updates: Partial<
-			Omit<
-				DocumentMetadata,
-				"id" | "updatedAt" | "createdAt" | "deletedAt" | "isActive"
-			>
-		>,
-	): Promise<DocumentMetadata | undefined> => {
-		if (!dexieDbRef.current) {
-			throw new Error("Database is not initialized yet.");
-		}
-		const db = dexieDbRef.current;
-		const now = Date.now();
+	return await db.transaction("rw", db.document_metadata, async () => {
+		return await db.document_metadata.add(record);
+	});
+};
 
-		return await db.transaction("rw", db.document_metadata, async () => {
-			await db.document_metadata.update(id, { ...updates, updatedAt: now });
-			return db.document_metadata.get(id);
-		});
-	};
+export const updateDocumentMetadata = async (
+	id: string,
+	updates: Partial<
+		Omit<
+			DocumentMetadata,
+			"id" | "updatedAt" | "createdAt" | "deletedAt" | "isActive"
+		>
+	>,
+): Promise<DocumentMetadata | undefined> => {
+	const db = getDocumentMetadataDb();
+	if (!db) {
+		throw new Error("IndexedDB is not available in this environment.");
+	}
+	const now = Date.now();
 
-	const deleteDocument = async (
-		id: string,
-	): Promise<DocumentMetadata | undefined> => {
-		if (!dexieDbRef.current) {
-			throw new Error("Database is not initialized yet.");
-		}
-		const db = dexieDbRef.current;
-		const now = Date.now();
+	return await db.transaction("rw", db.document_metadata, async () => {
+		await db.document_metadata.update(id, { ...updates, updatedAt: now });
+		return db.document_metadata.get(id);
+	});
+};
 
-		return await db.transaction("rw", db.document_metadata, async () => {
-			await db.document_metadata.update(id, { isActive: 0, deletedAt: now });
-			return db.document_metadata.get(id);
-		});
-	};
+export const deleteDocumentMetadata = async (
+	id: string,
+): Promise<DocumentMetadata | undefined> => {
+	const db = getDocumentMetadataDb();
+	if (!db) {
+		throw new Error("IndexedDB is not available in this environment.");
+	}
+	const now = Date.now();
 
-	const getDocument = async (
-		id: string,
-	): Promise<DocumentMetadata | undefined> => {
-		if (!dexieDbRef.current) {
-			throw new Error("Database is not initialized yet.");
-		}
-		const db = dexieDbRef.current;
-		return await db.document_metadata.get(id);
-	};
+	return await db.transaction("rw", db.document_metadata, async () => {
+		await db.document_metadata.update(id, { isActive: 0, deletedAt: now });
+		return db.document_metadata.get(id);
+	});
+};
 
-	return {
-		createDocument,
-		updateDocument,
-		deleteDocument,
-		getDocument,
-	};
+export const getDocumentMetadata = async (
+	id: string,
+): Promise<DocumentMetadata | undefined> => {
+	const db = getDocumentMetadataDb();
+	if (!db) {
+		throw new Error("IndexedDB is not available in this environment.");
+	}
+	return await db.document_metadata.get(id);
 };

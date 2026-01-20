@@ -3,7 +3,8 @@ import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
 	type DocumentMetadata,
-	useDocumentStore,
+	deleteDocumentMetadata,
+	updateDocumentMetadata,
 } from "@/hooks/use-document-store";
 
 type DocumentDetailsCardProps = {
@@ -16,7 +17,6 @@ export const DocumentDetailsCard = ({
 	isLoading,
 }: DocumentDetailsCardProps) => {
 	const [title, setTitle] = useState(document?.title ?? "");
-	const { updateDocument, deleteDocument } = useDocumentStore();
 	const hasDocument = !!document;
 
 	useEffect(() => {
@@ -28,7 +28,7 @@ export const DocumentDetailsCard = ({
 			return;
 		}
 		const trimmed = title.trim() || "Untitled document";
-		const updated = await updateDocument(document.id, { title: trimmed });
+		const updated = await updateDocumentMetadata(document.id, { title: trimmed });
 		if (updated) {
 			setTitle(updated.title);
 		}
@@ -38,7 +38,7 @@ export const DocumentDetailsCard = ({
 		if (!document) {
 			return;
 		}
-		await deleteDocument(document.id);
+		await deleteDocumentMetadata(document.id);
 		window.location.assign("/");
 	};
 

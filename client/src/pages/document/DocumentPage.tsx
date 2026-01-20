@@ -1,6 +1,6 @@
 import { Box, Stack } from "@mui/joy";
 import { useQuery } from "@tanstack/react-query";
-import { useDocumentStore } from "@/hooks/use-document-store";
+import { getDocumentMetadata } from "@/hooks/use-document-store";
 import { DocumentDetailsCard } from "./components/DocumentDetailsCard";
 import { DocumentEditorCard } from "./components/DocumentEditorCard";
 import { DocumentHeader } from "./components/DocumentHeader";
@@ -11,11 +11,9 @@ type DocumentPageProps = {
 };
 
 export const DocumentPage = ({ docId }: DocumentPageProps) => {
-	const { getDocument } = useDocumentStore();
-
 	const { isLoading, data: document } = useQuery({
-		queryKey: ["document_fech", docId],
-		queryFn: () => getDocument(docId),
+		queryKey: ["document_fetch", docId],
+		queryFn: () => getDocumentMetadata(docId),
 	});
 	const isMissing = !isLoading && !document;
 

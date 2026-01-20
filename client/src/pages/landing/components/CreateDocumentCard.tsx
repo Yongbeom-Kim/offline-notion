@@ -12,16 +12,14 @@ import {
 } from "@mui/joy";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { useDocumentStore } from "@/hooks/use-document-store";
+import { createDocumentMetadata } from "@/hooks/use-document-store";
 
 export const CreateDocumentComponent = () => {
 	const [newTitle, setNewTitle] = useState("");
 	const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-	const { createDocument } = useDocumentStore();
-
 	const handleCreate = async () => {
-		console.log(await createDocument(newTitle));
+		console.log(await createDocumentMetadata(newTitle));
 		setNewTitle("");
 		setIsCreateOpen(false);
 	};

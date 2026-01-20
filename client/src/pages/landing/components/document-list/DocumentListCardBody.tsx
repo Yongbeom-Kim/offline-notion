@@ -14,7 +14,8 @@ import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import {
 	type DocumentMetadata,
-	useDocumentStore,
+	deleteDocumentMetadata,
+	updateDocumentMetadata,
 } from "@/hooks/use-document-store";
 
 type DocumentListCardBodyProps = {
@@ -31,7 +32,6 @@ export const DocumentListCardBody = ({
 	setEditingId,
 }: DocumentListCardBodyProps) => {
 	const [editingTitle, setEditingTitle] = useState("");
-	const { updateDocument, deleteDocument } = useDocumentStore();
 
 	if (isLoading) {
 		return (
@@ -53,7 +53,7 @@ export const DocumentListCardBody = ({
 	}
 
 	const handleUpdateTitle = (doc: DocumentMetadata) => {
-		updateDocument(doc.id, {
+		updateDocumentMetadata(doc.id, {
 			title: editingTitle,
 		});
 		setEditingId(null);
@@ -125,7 +125,7 @@ export const DocumentListCardBody = ({
 								color="danger"
 								variant="soft"
 								size="sm"
-								onClick={() => deleteDocument(doc.id)}
+								onClick={() => deleteDocumentMetadata(doc.id)}
 								aria-label={`Delete ${doc.title}`}
 							>
 								<Trash2 size={14} />
