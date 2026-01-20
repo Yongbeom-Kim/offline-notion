@@ -1,10 +1,9 @@
-import { Box, Stack } from "@mui/joy";
+import { Box } from "@mui/joy";
 import { useQuery } from "@tanstack/react-query";
 import { getDocumentMetadata } from "@/hooks/use-document-store";
-import { DocumentDetailsCard } from "./components/DocumentDetailsCard";
 import { DocumentEditorCard } from "./components/DocumentEditorCard";
-import { DocumentHeader } from "./components/DocumentHeader";
 import { DocumentNotFoundCard } from "./components/DocumentNotFoundCard";
+import { DocumentTitle } from "./components/DocumentTitle";
 
 type DocumentPageProps = {
 	docId: string;
@@ -26,15 +25,9 @@ export const DocumentPage = ({ docId }: DocumentPageProps) => {
 	}
 
 	return (
-		<Box sx={{ px: { xs: 3, md: 6 }, py: 4 }}>
-			<Stack spacing={2}>
-				<DocumentHeader />
-				<DocumentDetailsCard
-					document={document ?? null}
-					isLoading={isLoading}
-				/>
-				<DocumentEditorCard documentId={document?.id ?? null} />
-			</Stack>
+		<Box sx={{ height: "100vh", width: "100vw", p: 4 }}>
+			<DocumentTitle document={document ?? null} isLoading={isLoading} />
+			<DocumentEditorCard documentId={document?.id ?? null} />
 		</Box>
 	);
 };
