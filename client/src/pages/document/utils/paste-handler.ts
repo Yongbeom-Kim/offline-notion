@@ -1,6 +1,6 @@
 import type { BlockNoteEditor } from "@blocknote/core";
-import { isInternalDocumentUrl, extractDocumentId } from "../../../utils/url";
 import { getDocumentMetadata } from "@/hooks/use-document-store";
+import { extractDocumentId, isInternalDocumentUrl } from "../../../utils/url";
 
 interface PasteHandlerContext {
 	event: ClipboardEvent;
@@ -13,7 +13,11 @@ interface PasteHandlerContext {
 
 type PasteHandler = (context: PasteHandlerContext) => boolean | undefined;
 
-export const internalLinkPasteHandler: PasteHandler = ({ event, editor, defaultPasteHandler }) => {
+export const internalLinkPasteHandler: PasteHandler = ({
+	event,
+	editor,
+	defaultPasteHandler,
+}) => {
 	const text = event.clipboardData?.getData("text/plain");
 
 	if (!text || !isInternalDocumentUrl(text, window.location.origin)) {
@@ -40,7 +44,10 @@ async function fetchDocumentAndCreateLink(
 		const linkText = document?.title || url;
 		editor.createLink(url, linkText);
 	} catch (error) {
-		console.error("Failed to fetch document metadata for paste handler:", error);
+		console.error(
+			"Failed to fetch document metadata for paste handler:",
+			error,
+		);
 		editor.createLink(url, url);
 	}
 }

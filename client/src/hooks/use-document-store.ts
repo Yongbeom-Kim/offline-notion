@@ -36,9 +36,7 @@ const getDocumentMetadataDb = (): DexieDocumentDB | null => {
 };
 
 export const useDocumentMetadataList = () => {
-	const dexieDbRef = useRef<DexieDocumentDB | null>(
-		getDocumentMetadataDb(),
-	);
+	const dexieDbRef = useRef<DexieDocumentDB | null>(getDocumentMetadataDb());
 	const [refreshCounter, setRefreshCounter] = useState(0);
 	const refreshDocumentList = useCallback(() => {
 		setRefreshCounter((prev) => prev + 1);

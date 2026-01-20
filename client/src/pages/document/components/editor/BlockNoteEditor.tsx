@@ -6,9 +6,8 @@ import "@blocknote/mantine/style.css";
 import { useEffect, useMemo } from "react";
 import { IndexeddbPersistence } from "y-indexeddb";
 import * as Y from "yjs";
-
-import { internalLinkPasteHandler } from "@/pages/document/utils/paste-handler";
 import { updateInternalDocumentLinks } from "@/pages/document/utils/document-link-updater";
+import { internalLinkPasteHandler } from "@/pages/document/utils/paste-handler";
 
 type BlockNoteEditorProps = { documentId: string };
 
@@ -28,11 +27,8 @@ export function BlockNoteEditor({ documentId }: BlockNoteEditorProps) {
 	useEffect(() => {
 		const persistence = new IndexeddbPersistence(`doc-${documentId}`, doc);
 
-		persistence.once('synced', async () => {
-			await updateInternalDocumentLinks(
-				editor,
-				window.location.origin,
-			);
+		persistence.once("synced", async () => {
+			await updateInternalDocumentLinks(editor, window.location.origin);
 		});
 
 		return () => {

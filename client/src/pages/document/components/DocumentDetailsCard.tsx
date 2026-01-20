@@ -28,7 +28,9 @@ export const DocumentDetailsCard = ({
 			return;
 		}
 		const trimmed = title.trim() || "Untitled document";
-		const updated = await updateDocumentMetadata(document.id, { title: trimmed });
+		const updated = await updateDocumentMetadata(document.id, {
+			title: trimmed,
+		});
 		if (updated) {
 			setTitle(updated.title);
 		}
