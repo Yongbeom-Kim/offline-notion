@@ -28,12 +28,12 @@ export const getDocumentBlocks = async (
 				const xmlFragment = doc.getXmlFragment("document-store");
 				const blocks = yXmlFragmentToBlocks(editor, xmlFragment);
 				resolve(blocks);
-			} catch (error) {
+			} catch (error: unknown) {
 				reject(error);
 			}
 		});
 
-		persistence.on("error", (error) => {
+		persistence.on("error", (error: unknown) => {
 			clearTimeout(timeoutId);
 			persistence.destroy();
 			reject(error);

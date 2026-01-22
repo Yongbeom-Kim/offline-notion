@@ -8,7 +8,9 @@ type DocumentEditorCardProps = {
 export const DocumentEditorCard = ({ documentId }: DocumentEditorCardProps) => {
 	return (
 		<ClientOnly>
-			{documentId && <BlockNoteEditor documentId={documentId} />}
+			{documentId && (
+				<BlockNoteEditor key={documentId} documentId={documentId} />
+			)}
 		</ClientOnly>
 	);
 };

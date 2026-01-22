@@ -16,11 +16,9 @@ import {
 	Typography,
 } from "@mui/joy";
 import { FileText, Search } from "lucide-react";
-import { useMemo, useState } from "react";
-import {
-	type DocumentMetadata,
-	useDocumentMetadataList,
-} from "@/hooks/use-document-store";
+import { useState } from "react";
+import type { DocumentMetadata } from "@/db/metadata";
+import { useGetDocumentMetadataList } from "@/db/use-get-document-metadata-list";
 
 interface LinkDocumentDialogProps {
 	open: boolean;
@@ -34,16 +32,13 @@ export const LinkDocumentDialog = ({
 	onDocumentSelected,
 }: LinkDocumentDialogProps) => {
 	const [searchQuery, setSearchQuery] = useState("");
-	const { documentList, isLoading } = useDocumentMetadataList();
+	const { documentList, isLoading } = useGetDocumentMetadataList();
 
-	const filteredDocuments = useMemo(() => {
-		if (!searchQuery.trim()) return documentList;
-
-		const query = searchQuery.toLowerCase();
-		return documentList.filter((doc) =>
-			doc.title.toLowerCase().includes(query),
-		);
-	}, [documentList, searchQuery]);
+	const filteredDocuments = !searchQuery.trim()
+		? (documentList ?? [])
+		: (documentList ?? []).filter((doc) =>
+				doc.title.toLowerCase().includes(searchQuery.toLowerCase()),
+			);
 
 	const handleSelectDocument = (doc: DocumentMetadata) => {
 		onDocumentSelected(doc.id, doc.title);
@@ -83,7 +78,7 @@ export const LinkDocumentDialog = ({
 								</Typography>
 							</Stack>
 						) : filteredDocuments.length === 0 ? (
-							documentList.length === 0 ? (
+							documentList?.length ? (
 								<Stack spacing={1} alignItems="center" sx={{ py: 4 }}>
 									<FileText size={48} opacity={0.5} />
 									<Typography level="title-md">No documents yet</Typography>

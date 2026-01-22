@@ -5,7 +5,7 @@ import {
 	type DocumentMetadata,
 	deleteDocumentMetadata,
 	updateDocumentMetadata,
-} from "@/hooks/use-document-store";
+} from "@/db/metadata";
 
 type DocumentDetailsCardProps = {
 	document: DocumentMetadata | null;

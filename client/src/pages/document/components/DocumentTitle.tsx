@@ -1,7 +1,6 @@
 import { Typography } from "@mui/joy";
 import { useCallback } from "react";
-import type { DocumentMetadata } from "@/hooks/use-document-store";
-import { updateDocumentMetadata } from "@/hooks/use-document-store";
+import { type DocumentMetadata, updateDocumentMetadata } from "@/db/metadata";
 
 type DocumentTitleProps = {
 	document: DocumentMetadata | null;

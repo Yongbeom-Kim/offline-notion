@@ -1,8 +1,5 @@
 import type { Block, BlockNoteEditor } from "@blocknote/core";
-import {
-	type DocumentMetadata,
-	getDocumentMetadata,
-} from "@/hooks/use-document-store";
+import { getDocumentMetadata } from "@/db/metadata";
 import { extractDocumentId, isInternalDocumentHref } from "../../../utils/url";
 
 /**

@@ -32,12 +32,12 @@ function BlockNoteEditorInner({ editor }: BlockNoteEditorInnerProps) {
 	});
 
 	return (
-		<div className="h-full w-full bg-white">
+		<div className=" bg-white">
 			<BlockNoteView
 				editor={editor}
 				theme="light"
-				className="h-full"
-				slashMenu={false}
+				slashMenu={true}
+				sideMenu={true}
 			>
 				<SuggestionMenuController
 					triggerCharacter="/"
@@ -56,6 +56,7 @@ function BlockNoteEditorInner({ editor }: BlockNoteEditorInnerProps) {
 export function BlockNoteEditor({ documentId }: BlockNoteEditorProps) {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: documentId is needed to recreate doc per document
 	const doc = useMemo(() => new Y.Doc(), [documentId]);
+	console.log(documentId, doc);
 
 	const editor = useCreateBlockNote({
 		collaboration: {

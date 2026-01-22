@@ -5,7 +5,6 @@ import {
 	HeadContent,
 	Scripts,
 } from "@tanstack/react-router";
-import Header from "../components/Header";
 import appCss from "../styles.css?url";
 
 interface MyRouterContext {
@@ -59,7 +58,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			<body>
 				<CssVarsProvider defaultMode="light">
 					<CssBaseline />
-					<Header />
 					{children}
 				</CssVarsProvider>
 				<Scripts />

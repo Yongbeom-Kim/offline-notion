@@ -1,5 +1,5 @@
 import type { BlockNoteEditor } from "@blocknote/core";
-import { getDocumentMetadata } from "@/hooks/use-document-store";
+import { getDocumentMetadata } from "@/db/metadata";
 import { extractDocumentId, isInternalDocumentUrl } from "../../../utils/url";
 
 interface PasteHandlerContext {

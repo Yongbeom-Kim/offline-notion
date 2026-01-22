@@ -11,7 +11,7 @@ import {
 } from "@mui/joy";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { createDocumentMetadata } from "@/hooks/use-document-store";
+import { createDocumentMetadata } from "@/db/metadata";
 
 interface CreateDocumentDialogProps {
 	open: boolean;

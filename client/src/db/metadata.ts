@@ -1,6 +1,4 @@
 import { Dexie, type EntityTable } from "dexie";
-import { useLiveQuery } from "dexie-react-hooks";
-import { useCallback, useRef, useState } from "react";
 import { v7 as uuid_v7 } from "uuid";
 
 const DB_NAME = "offline_notion" as const;
@@ -20,7 +18,7 @@ export type DexieDocumentDB = Dexie & {
 
 let dbInstance: DexieDocumentDB | null = null;
 
-const getDocumentMetadataDb = (): DexieDocumentDB | null => {
+export const getDocumentMetadataDb = (): DexieDocumentDB | null => {
 	if (typeof window === "undefined") return null;
 	if (dbInstance) {
 		return dbInstance;
@@ -33,34 +31,6 @@ const getDocumentMetadataDb = (): DexieDocumentDB | null => {
 
 	dbInstance = db;
 	return db;
-};
-
-export const useDocumentMetadataList = () => {
-	const dexieDbRef = useRef<DexieDocumentDB | null>(getDocumentMetadataDb());
-	const [refreshCounter, setRefreshCounter] = useState(0);
-	const refreshDocumentList = useCallback(() => {
-		setRefreshCounter((prev) => prev + 1);
-	}, []);
-
-	const documentList = useLiveQuery(
-		() => {
-			if (!dexieDbRef.current) return [];
-			return dexieDbRef.current.document_metadata
-				.where("[isActive+updatedAt]")
-				.between([1, Dexie.minKey], [1, Dexie.maxKey])
-				.reverse()
-				.toArray();
-		},
-		[refreshCounter],
-		[],
-	);
-	const isLoading = documentList === undefined;
-
-	return {
-		documentList: documentList,
-		isLoading,
-		refreshDocumentList,
-	};
 };
 
 export const createDocumentMetadata = async (
@@ -129,4 +99,16 @@ export const getDocumentMetadata = async (
 		throw new Error("IndexedDB is not available in this environment.");
 	}
 	return await db.document_metadata.get(id);
+};
+
+export const getDocumentMetadataList = async () => {
+	const db = getDocumentMetadataDb();
+	if (!db) {
+		throw new Error("IndexedDB is not available in this environment.");
+	}
+	return await db.document_metadata
+		.where("[isActive+updatedAt]")
+		.between([1, Dexie.minKey], [1, Dexie.maxKey])
+		.reverse()
+		.toArray();
 };

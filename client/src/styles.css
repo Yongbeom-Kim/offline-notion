@@ -13,3 +13,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+body {
+  /* Reserve scroll gutters for overlays like modals, tooltips, or scrollbars */
+  scroll-gutter: stable both-edges;
+  scrollbar-gutter: stable both-edges;
+}
