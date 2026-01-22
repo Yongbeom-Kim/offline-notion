@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/joy";
+import { Box, CircularProgress, Typography } from "@mui/joy";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { createDocumentMetadata } from "@/db/metadata";
@@ -31,6 +31,24 @@ function LandingRedirect() {
 
 		redirectToDocument();
 	}, [hierarchy, isLoading, navigate]);
+
+	if (isLoading) {
+		return (
+			<Box
+				sx={{
+					display: "flex",
+					flexDirection: "column",
+					alignItems: "center",
+					justifyContent: "center",
+					minHeight: "100vh",
+					gap: 2,
+				}}
+			>
+				<CircularProgress size="lg" />
+				<Typography level="body-md">Loading your workspace...</Typography>
+			</Box>
+		);
+	}
 
 	return (
 		<Box
