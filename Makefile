@@ -17,19 +17,29 @@ gen_test_env:
 	fi
 
 start:
-	docker compose -p "$(PROJECT_NAME)_prod" -f docker-compose.yml up --build
+	docker compose -p "$(PROJECT_NAME)_prod" -f docker-compose.yml -f docker-compose.prod.yml up --build --remove-orphans
 
 start_detached:
-	docker compose -p "$(PROJECT_NAME)_prod" -f docker-compose.yml up -d --build
+	docker compose -p "$(PROJECT_NAME)_prod" -f docker-compose.yml -f docker-compose.prod.yml up -d --build --remove-orphans
 
 dev:
 	docker compose -p "$(PROJECT_NAME)_dev" -f docker-compose.yml -f docker-compose.dev.yml up --build --remove-orphans
 
 stop:
 	docker compose -p "$(PROJECT_NAME)_prod" down
-
-stop-dev:
 	docker compose -p "$(PROJECT_NAME)_dev" down
 
 docker-prune:
 	docker system prune -a
+
+tofu-init:
+	cd infra && tofu init
+
+tofu-plan:
+	cd infra && tofu plan
+
+tofu-apply:
+	cd infra && tofu apply -auto-approve
+
+tofu-destroy:
+	cd infra && tofu destroy -auto-approve

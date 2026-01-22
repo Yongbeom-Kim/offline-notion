@@ -23,12 +23,11 @@ services:
     image: voidauth/voidauth:latest
     restart: unless-stopped
     volumes:
-      - ./.volumes/voidauth/config:/app/config
-      - ./.volumes/voidauth/db:/app/db
+      - ../.offline-notion-volumes/voidauth/config:/app/config
+      - ../.offline-notion-volumes/voidauth/db:/app/db
+    env_file:
+      - ./.env
     environment:
-      # Required environment variables
-      APP_URL: # required, ex. https://auth.example.com
-      STORAGE_KEY: # required
       DB_ADAPTER: sqlite
 
 volumes:

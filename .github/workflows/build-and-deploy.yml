@@ -32,3 +32,20 @@ jobs:
         run: make gen_test_env
       - name: Build (dev)
         run: docker compose -f docker-compose.yml -f docker-compose.dev.yml build
+
+  deploy:
+    name: 'Deploy'
+    runs-on: 'offline-notion'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: 'Create env file'
+        run: |
+          touch .env
+          echo HOSTNAME=docs.yongbeom.com >> .env
+          echo APP_URL=https://docs.yongbeom.com/auth >> .env
+          echo STORAGE_KEY=${{ secrets.STORAGE_KEY }} >> .env
+          cat .env
+
+      - name: Deploy
+        run: make start_detached

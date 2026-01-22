@@ -13,6 +13,10 @@ const config = defineConfig({
 			"@": fileURLToPath(new URL("./src", import.meta.url)),
 		},
 	},
+	build: {
+		sourcemap: false,
+		minify: "esbuild",
+	},
 	plugins: [
 		devtools(),
 		nitro(),

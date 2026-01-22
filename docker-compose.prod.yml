@@ -1,0 +1,15 @@
+services:
+  proxy:
+    image: caddy:latest
+    restart: unless-stopped
+    ports:
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
+      - "[::]:80:80"
+      - "[::]:443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ../.offline-notion-volumes/caddy/data:/data
+      - ../.offline-notion-volumes/caddy/config:/config
+    env_file:
+      - ./.env
