@@ -12,22 +12,29 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-    depends_on:
-      - server
-      - backend
 
   backend:
     build:
       context: ./server
       target: dev
+    ports:
+      - "3001:3001"
     volumes:
       - ./server:/app
       - /app/tmp
 
-  # Authentik overrides
-  postgresql:
+  voidauth: 
+    image: voidauth/voidauth:latest
+    restart: unless-stopped
     volumes:
-    - database_dev:/var/lib/postgresql/data
+      - ./.volumes/voidauth/config:/app/config
+      - ./.volumes/voidauth/db:/app/db
+    ports:
+      - "3002:3000"
+    environment:
+      APP_URL: "http://localhost:3002"
+      STORAGE_KEY: h1joUBbOFxt2OiCfruKNuvx9NQ5LPxCp # dev, so it doesn't matter. Don't expose this in prod.
+      DB_ADAPTER: sqlite
 
 volumes:
   database_dev:

@@ -23,7 +23,7 @@ start_detached:
 	docker compose -p "$(PROJECT_NAME)_prod" -f docker-compose.yml up -d --build
 
 dev:
-	docker compose -p "$(PROJECT_NAME)_dev" -f docker-compose.yml -f docker-compose.dev.yml up --build
+	docker compose -p "$(PROJECT_NAME)_dev" -f docker-compose.yml -f docker-compose.dev.yml up --build --remove-orphans
 
 stop:
 	docker compose -p "$(PROJECT_NAME)_prod" down

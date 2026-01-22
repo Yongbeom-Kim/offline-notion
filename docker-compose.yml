@@ -4,87 +4,32 @@ services:
     build:
       context: ./client
       target: prod
-    ports:
-      - "3000:3000"
     restart: unless-stopped
     environment:
       - NODE_ENV=production
     depends_on:
-      - server
+      - voidauth
       - backend
 
   backend:
     build:
       context: ./server
       target: prod
-    ports:
-      - "3001:3001"
     restart: unless-stopped
     environment:
       - NODE_ENV=production
-
-  # Authentik Services
-  postgresql:
-    env_file:
-    - .env
-    environment:
-      POSTGRES_DB: ${PG_DB:-authentik}
-      POSTGRES_PASSWORD: ${PG_PASS:?database password required}
-      POSTGRES_USER: ${PG_USER:-authentik}
-    healthcheck:
-      interval: 30s
-      retries: 5
-      start_period: 20s
-      test:
-      - CMD-SHELL
-      - pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
-      timeout: 5s
-    image: docker.io/library/postgres:16-alpine
+      
+  voidauth: 
+    image: voidauth/voidauth:latest
     restart: unless-stopped
     volumes:
-    - database:/var/lib/postgresql/data
-  server:
-    command: server
-    depends_on:
-      postgresql:
-        condition: service_healthy
-    env_file:
-    - .env
+      - ./.volumes/voidauth/config:/app/config
+      - ./.volumes/voidauth/db:/app/db
     environment:
-      AUTHENTIK_POSTGRESQL__HOST: postgresql
-      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
-      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
-      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
-      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.10.3}
-    ports:
-    - ${COMPOSE_PORT_HTTP:-9000}:9000
-    - ${COMPOSE_PORT_HTTPS:-9443}:9443
-    restart: unless-stopped
-    volumes:
-    - ./media:/media
-    - ./custom-templates:/templates
-  worker:
-    command: worker
-    depends_on:
-      postgresql:
-        condition: service_healthy
-    env_file:
-    - .env
-    environment:
-      AUTHENTIK_POSTGRESQL__HOST: postgresql
-      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
-      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
-      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
-      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.10.3}
-    restart: unless-stopped
-    user: root
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-    - ./media:/media
-    - ./certs:/certs
-    - ./custom-templates:/templates
+      # Required environment variables
+      APP_URL: # required, ex. https://auth.example.com
+      STORAGE_KEY: # required
+      DB_ADAPTER: sqlite
 
 volumes:
   database:
