@@ -1,12 +1,13 @@
 import { Box, CircularProgress, Typography } from "@mui/joy";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { createDocumentMetadata } from "@/db/metadata";
 import { useDocumentHierarchy } from "@/hooks/use-document-hierarchy";
 
 function LandingRedirect() {
 	const navigate = useNavigate();
 	const { hierarchy, isLoading } = useDocumentHierarchy();
+	const [isNavCalled, setIsNavCalled] = useState(false)
 
 	useEffect(() => {
 		if (isLoading) return;
@@ -17,6 +18,8 @@ function LandingRedirect() {
 				: null;
 
 			if (latestRoot) {
+				setIsNavCalled(true)
+				// short delay between calling navigate() and actual navigation, prevent showing error screen
 				navigate({ to: "/docs/$docId", params: { docId: latestRoot.id } });
 				return;
 			}
@@ -32,7 +35,7 @@ function LandingRedirect() {
 		redirectToDocument();
 	}, [hierarchy, isLoading, navigate]);
 
-	if (isLoading) {
+	if (isNavCalled || isLoading) {
 		return (
 			<Box
 				sx={{
