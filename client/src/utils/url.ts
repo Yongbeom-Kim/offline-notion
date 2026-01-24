@@ -30,6 +30,17 @@ export function isInternalDocumentUrl(
 }
 
 /**
+ * Check if a URL string is a valid HTTPS URL
+ * @param url - The URL string to check
+ * @returns true if the URL uses the "https:" protocol, false otherwise
+ */
+
+export function isHttpsUrl(url: string): boolean {
+	const parsedUrl = parseUrl(url);
+	return !!parsedUrl && parsedUrl.protocol === "https:";
+}
+
+/**
  * Extract document ID from an internal document URL
  * @param url - The URL string
  * @returns the document ID if valid, null otherwise

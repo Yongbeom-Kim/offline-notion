@@ -12,7 +12,7 @@ import { useEffect, useMemo } from "react";
 import { IndexeddbPersistence } from "y-indexeddb";
 import * as Y from "yjs";
 import { updateInternalDocumentLinks } from "@/pages/document/utils/document-link-updater";
-import { internalLinkPasteHandler } from "@/pages/document/utils/paste-handler";
+import { pasteHandler } from "@/pages/document/utils/paste-handler";
 import { EditorDialogProvider, useEditorDialog } from "./slash-commands";
 import { createCustomSlashMenuItems } from "./slash-commands/custom-slash-menu-items";
 
@@ -64,7 +64,7 @@ export function BlockNoteEditor({ documentId }: BlockNoteEditorProps) {
 			user: { name: "Offline Notion", color: "#0ea5e9" },
 			showCursorLabels: "activity",
 		},
-		pasteHandler: internalLinkPasteHandler,
+		pasteHandler: pasteHandler,
 	});
 
 	useEffect(() => {
