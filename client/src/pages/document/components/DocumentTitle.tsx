@@ -20,6 +20,20 @@ export const DocumentTitle = ({ document, isLoading }: DocumentTitleProps) => {
 		[document],
 	);
 
+	const handleKeyDown = useCallback(
+		(e: React.KeyboardEvent<HTMLHeadingElement>) => {
+			if (e.key === "Enter") {
+				e.preventDefault();
+				handleTitleSave(e.currentTarget.textContent || "");
+				// Focus the BlockNote editor (uses ProseMirror under the hood)
+				const editorElement =
+					window.document.querySelector<HTMLElement>(".ProseMirror");
+				editorElement?.focus();
+			}
+		},
+		[handleTitleSave],
+	);
+
 	if (isLoading) {
 		return null;
 	}
@@ -32,6 +46,7 @@ export const DocumentTitle = ({ document, isLoading }: DocumentTitleProps) => {
 			role="textbox"
 			tabIndex={0}
 			onBlur={(e) => handleTitleSave(e.currentTarget.textContent || "")}
+			onKeyDown={handleKeyDown}
 			sx={{
 				fontSize: "2.5rem",
 				fontWeight: 700,
