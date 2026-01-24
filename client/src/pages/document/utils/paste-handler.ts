@@ -1,5 +1,5 @@
 import type { BlockNoteEditor } from "@blocknote/core";
-import { getDocumentMetadata } from "@/db/metadata";
+import { getNode } from "@/db/metadata";
 import { extractDocumentId, isInternalDocumentUrl } from "../../../utils/url";
 
 interface PasteHandlerContext {
@@ -39,7 +39,7 @@ async function fetchDocumentAndCreateLink(
 	editor: BlockNoteEditor,
 ) {
 	try {
-		const document = await getDocumentMetadata(docId);
+		const document = await getNode(docId);
 
 		const linkText = document?.title || url;
 		editor.createLink(url, linkText);

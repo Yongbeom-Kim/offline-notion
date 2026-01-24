@@ -1,9 +1,8 @@
 import { Card, Divider, Stack, Typography } from "@mui/joy";
-import { useParams } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { useDocumentContext } from "@/pages/document/context/document-context/DocumentContext";
 import { AddDocumentButton } from "./AddDocumentButton";
+import { AddFolderButton } from "./AddFolderButton";
 import { SidebarDocumentTree } from "./SidebarDocumentTree";
 
 const SIDEBAR_STATE_LOCALSTORAGE_KEY = "SIDEBAR_STATE";
@@ -44,9 +43,6 @@ const useSidebarState = () => {
 
 export const Sidebar = () => {
 	const [_sidebarState, _setSidebarState] = useSidebarState();
-	const { hierarchyData } = useDocumentContext();
-	const params = useParams({ strict: false });
-	const _currentDocumentId = (params as { docId?: string }).docId;
 
 	return (
 		<aside>
@@ -84,11 +80,14 @@ export const Sidebar = () => {
 
 						<Divider />
 
-						<SidebarDocumentTree hierarchyData={hierarchyData} />
+						<SidebarDocumentTree />
 
 						<Divider />
 
-						<AddDocumentButton />
+						<Stack spacing={0}>
+							<AddDocumentButton />
+							<AddFolderButton />
+						</Stack>
 					</Stack>
 				</Card>
 			</nav>

@@ -2,13 +2,13 @@ import { Button, Card, Input, Stack, Typography } from "@mui/joy";
 import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
-	type DocumentMetadata,
-	deleteDocumentMetadata,
-	updateDocumentMetadata,
+	type NodeMetadata,
+	deleteNote,
+	updateNodeTitle,
 } from "@/db/metadata";
 
 type DocumentDetailsCardProps = {
-	document: DocumentMetadata | null;
+	document: NodeMetadata | null;
 	isLoading: boolean;
 };
 
@@ -28,9 +28,7 @@ export const DocumentDetailsCard = ({
 			return;
 		}
 		const trimmed = title.trim() || "Untitled document";
-		const updated = await updateDocumentMetadata(document.id, {
-			title: trimmed,
-		});
+		const updated = await updateNodeTitle(document.id, trimmed);
 		if (updated) {
 			setTitle(updated.title);
 		}
@@ -40,7 +38,7 @@ export const DocumentDetailsCard = ({
 		if (!document) {
 			return;
 		}
-		await deleteDocumentMetadata(document.id);
+		await deleteNote(document.id);
 		window.location.assign("/");
 	};
 

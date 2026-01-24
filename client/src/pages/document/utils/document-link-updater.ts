@@ -1,5 +1,5 @@
 import type { Block, BlockNoteEditor } from "@blocknote/core";
-import { getDocumentMetadata } from "@/db/metadata";
+import { getNode, type NodeMetadata } from "@/db/metadata";
 import { extractDocumentId, isInternalDocumentHref } from "../../../utils/url";
 
 /**
@@ -107,10 +107,10 @@ export async function updateInternalDocumentLinks(
 
 		const docIds = [...new Set(internalLinks.map((link) => link.docId))];
 		const documents = await Promise.all(
-			docIds.map((docId) => getDocumentMetadata(docId)),
+			docIds.map((docId) => getNode(docId)),
 		);
 
-		const documentMap = new Map<string, DocumentMetadata | undefined>();
+		const documentMap = new Map<string, NodeMetadata | undefined>();
 		docIds.forEach((docId, index) => {
 			documentMap.set(docId, documents[index]);
 		});

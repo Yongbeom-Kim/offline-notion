@@ -11,7 +11,7 @@ import {
 } from "@mui/joy";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { createDocumentMetadata } from "@/db/metadata";
+import { createNode, NodeType } from "@/db/metadata";
 
 interface CreateDocumentDialogProps {
 	open: boolean;
@@ -32,7 +32,7 @@ export const CreateDocumentDialog = ({
 
 		setIsCreating(true);
 		try {
-			const docId = await createDocumentMetadata(newTitle);
+			const docId = await createNode(newTitle, NodeType.Document);
 			onDocumentCreated(docId, newTitle.trim());
 
 			const url = `${window.location.origin}/docs/${docId}`;

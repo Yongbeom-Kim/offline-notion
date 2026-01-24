@@ -1,9 +1,9 @@
 import { Typography } from "@mui/joy";
 import { useCallback } from "react";
-import { type DocumentMetadata, updateDocumentMetadata } from "@/db/metadata";
+import { type NodeMetadata, updateNodeTitle } from "@/db/metadata";
 
 type DocumentTitleProps = {
-	document: DocumentMetadata | null;
+	document: NodeMetadata | null;
 	isLoading: boolean;
 };
 
@@ -14,7 +14,7 @@ export const DocumentTitle = ({ document, isLoading }: DocumentTitleProps) => {
 
 			const trimmed = newTitle.trim() || "Untitled";
 			if (trimmed !== document.title) {
-				await updateDocumentMetadata(document.id, { title: trimmed });
+				await updateNodeTitle(document.id, trimmed);
 			}
 		},
 		[document],

@@ -17,8 +17,7 @@ import {
 } from "@mui/joy";
 import { FileText, Search } from "lucide-react";
 import { useState } from "react";
-import type { DocumentMetadata } from "@/db/metadata";
-import { useGetDocumentMetadataList } from "@/db/use-get-document-metadata-list";
+import { useGetAllActiveDocuments, type NodeMetadata } from "@/db/metadata";
 
 interface LinkDocumentDialogProps {
 	open: boolean;
@@ -32,15 +31,15 @@ export const LinkDocumentDialog = ({
 	onDocumentSelected,
 }: LinkDocumentDialogProps) => {
 	const [searchQuery, setSearchQuery] = useState("");
-	const { documentList, isLoading } = useGetDocumentMetadataList();
+	const { documents, isLoading } = useGetAllActiveDocuments();
 
 	const filteredDocuments = !searchQuery.trim()
-		? (documentList ?? [])
-		: (documentList ?? []).filter((doc) =>
+		? (documents ?? [])
+		: (documents ?? []).filter((doc) =>
 				doc.title.toLowerCase().includes(searchQuery.toLowerCase()),
 			);
 
-	const handleSelectDocument = (doc: DocumentMetadata) => {
+	const handleSelectDocument = (doc: NodeMetadata) => {
 		onDocumentSelected(doc.id, doc.title);
 		setSearchQuery("");
 		onClose();
@@ -78,7 +77,7 @@ export const LinkDocumentDialog = ({
 								</Typography>
 							</Stack>
 						) : filteredDocuments.length === 0 ? (
-							documentList?.length ? (
+							documents?.length ? (
 								<Stack spacing={1} alignItems="center" sx={{ py: 4 }}>
 									<FileText size={48} opacity={0.5} />
 									<Typography level="title-md">No documents yet</Typography>
