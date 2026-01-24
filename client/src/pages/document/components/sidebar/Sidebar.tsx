@@ -4,6 +4,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { AddDocumentButton } from "./AddDocumentButton";
 import { AddFolderButton } from "./AddFolderButton";
 import { SidebarDocumentTree } from "./SidebarDocumentTree";
+import { SidebarEditProvider } from "./SidebarEditContext";
 
 const SIDEBAR_STATE_LOCALSTORAGE_KEY = "SIDEBAR_STATE";
 
@@ -45,52 +46,54 @@ export const Sidebar = () => {
 	const [_sidebarState, _setSidebarState] = useSidebarState();
 
 	return (
-		<aside>
-			<nav>
-				<Card
-					sx={{
-						padding: "24px 16px",
-						bgcolor: "Background",
-						zIndex: 10,
-						height: "100vh",
-						display: "flex",
-						flexDirection: "column",
-					}}
-				>
-					<Stack
-						direction="column"
-						spacing={2}
+		<SidebarEditProvider>
+			<aside>
+				<nav>
+					<Card
 						sx={{
-							flex: 1,
-							justifyContent: "flex-start",
-							alignItems: "stretch",
+							padding: "24px 16px",
+							bgcolor: "Background",
+							zIndex: 10,
+							height: "100vh",
+							display: "flex",
+							flexDirection: "column",
 						}}
 					>
-						<Typography
-							level="h3"
+						<Stack
+							direction="column"
+							spacing={2}
 							sx={{
-								px: 2,
-								py: 1,
-								color: "text.primary",
-								fontWeight: 600,
+								flex: 1,
+								justifyContent: "flex-start",
+								alignItems: "stretch",
 							}}
 						>
-							Workspace
-						</Typography>
+							<Typography
+								level="h3"
+								sx={{
+									px: 2,
+									py: 1,
+									color: "text.primary",
+									fontWeight: 600,
+								}}
+							>
+								Workspace
+							</Typography>
 
-						<Divider />
+							<Divider />
 
-						<SidebarDocumentTree />
+							<SidebarDocumentTree />
 
-						<Divider />
+							<Divider />
 
-						<Stack spacing={0}>
-							<AddDocumentButton />
-							<AddFolderButton />
+							<Stack spacing={0}>
+								<AddDocumentButton />
+								<AddFolderButton />
+							</Stack>
 						</Stack>
-					</Stack>
-				</Card>
-			</nav>
-		</aside>
+					</Card>
+				</nav>
+			</aside>
+		</SidebarEditProvider>
 	);
 };

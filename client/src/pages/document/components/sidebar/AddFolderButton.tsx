@@ -2,14 +2,17 @@ import { Button, Typography } from "@mui/joy";
 import { FolderPlus } from "lucide-react";
 import { useState } from "react";
 import { createNode, NodeType } from "@/db/metadata";
+import { useSidebarEdit } from "./SidebarEditContext";
 
 export const AddFolderButton = () => {
 	const [isCreating, setIsCreating] = useState(false);
+	const { setEditingNodeId } = useSidebarEdit();
 
 	const handleCreateFolder = async () => {
 		setIsCreating(true);
 		try {
-			await createNode("New Folder", NodeType.Folder);
+			const folderId = await createNode("New Folder", NodeType.Folder);
+			setEditingNodeId(folderId);
 		} catch (error) {
 			console.error("Failed to create folder:", error);
 		} finally {

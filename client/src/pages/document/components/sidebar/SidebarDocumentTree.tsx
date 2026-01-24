@@ -3,6 +3,7 @@ import {
 	Button,
 	CircularProgress,
 	Dropdown,
+	ListDivider,
 	Menu,
 	MenuButton,
 	MenuItem,
@@ -11,18 +12,22 @@ import {
 import { useNavigate } from "@tanstack/react-router";
 import {
 	ChevronDown,
+	FilePlus,
 	FileText,
 	Folder,
 	FolderInput,
+	FolderPlus,
 	MoreHorizontal,
 	Pencil,
 	Trash2,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
+	createNode,
 	deleteNote,
 	type NodeMetadata,
 	NodeType,
+	updateNodeTitle,
 	useGetNodeChildren,
 	useGetRootNodes,
 } from "@/db/metadata";
@@ -30,6 +35,7 @@ import { useDocumentContext } from "../../context/document-context/DocumentConte
 import { isAncestorOf } from "../../utils/document-hierarchy";
 import { MoveNodeDialog } from "./MoveNodeDialog";
 import { RenameNodeDialog } from "./RenameNodeDialog";
+import { useSidebarEdit } from "./SidebarEditContext";
 
 export const SidebarDocumentTree = () => {
 	const { rootNodes, isLoading, error } = useGetRootNodes();
@@ -79,7 +85,9 @@ type SidebarDocumentTreeItemProps = {
 export const SidebarDocumentTreeItem = ({
 	node,
 }: SidebarDocumentTreeItemProps) => {
+	const navigate = useNavigate();
 	const { metadata } = useDocumentContext();
+	const { setEditingNodeId } = useSidebarEdit();
 	const pageDocId = metadata.data?.id;
 	const hasChildren = node.childrenIds.length > 0;
 	const [isExpanded, setExpanded] = useState(false);
@@ -106,6 +114,31 @@ export const SidebarDocumentTreeItem = ({
 		checkAncestor();
 	}, [node.id, pageDocId, hasChildren]);
 
+	const handleCreateDocument = async () => {
+		try {
+			const docId = await createNode(
+				"Untitled document",
+				NodeType.Document,
+				node.id,
+			);
+			setExpanded(true);
+			setEditingNodeId(docId);
+			navigate({ to: "/docs/$docId", params: { docId } });
+		} catch (error) {
+			console.error("Failed to create document:", error);
+		}
+	};
+
+	const handleCreateFolder = async () => {
+		try {
+			const folderId = await createNode("New Folder", NodeType.Folder, node.id);
+			setExpanded(true);
+			setEditingNodeId(folderId);
+		} catch (error) {
+			console.error("Failed to create folder:", error);
+		}
+	};
+
 	return (
 		<Stack direction="column" spacing={0}>
 			<SideBarDocumentTreeItemButton
@@ -115,6 +148,8 @@ export const SidebarDocumentTreeItem = ({
 				hasChildren={hasChildren}
 				onMoveClick={() => setMoveDialogOpen(true)}
 				onRenameClick={() => setRenameDialogOpen(true)}
+				onCreateDocument={handleCreateDocument}
+				onCreateFolder={handleCreateFolder}
 			/>
 			{isExpanded && hasChildren && (
 				<SidebarDocumentTreeChildren parentId={node.id} />
@@ -176,6 +211,8 @@ type SideBarDocumentTreeItemButtonProps = {
 	hasChildren: boolean;
 	onMoveClick: () => void;
 	onRenameClick: () => void;
+	onCreateDocument: () => void;
+	onCreateFolder: () => void;
 };
 
 const SideBarDocumentTreeItemButton = ({
@@ -185,14 +222,28 @@ const SideBarDocumentTreeItemButton = ({
 	hasChildren,
 	onMoveClick,
 	onRenameClick,
+	onCreateDocument,
+	onCreateFolder,
 }: SideBarDocumentTreeItemButtonProps) => {
 	const navigate = useNavigate();
 	const { metadata } = useDocumentContext();
+	const { editingNodeId, setEditingNodeId } = useSidebarEdit();
+	const inputRef = useRef<HTMLInputElement>(null);
 	const pageDocId = metadata.data?.id;
 	const isFolder = node.type === NodeType.Folder;
 	const isSelected = node.id === pageDocId;
+	const isEditing = editingNodeId === node.id;
+
+	// Focus and select all text when entering edit mode
+	useEffect(() => {
+		if (isEditing && inputRef.current) {
+			inputRef.current.focus();
+			inputRef.current.select();
+		}
+	}, [isEditing]);
 
 	const handleClick = () => {
+		if (isEditing) return; // Don't navigate/expand while editing
 		if (isFolder) {
 			// For folders, toggle expansion
 			setExpanded((prev) => !prev);
@@ -227,6 +278,35 @@ const SideBarDocumentTreeItemButton = ({
 		}
 	};
 
+	const handleTitleSave = async (newTitle: string) => {
+		const trimmedTitle = newTitle.trim();
+		if (trimmedTitle && trimmedTitle !== node.title) {
+			try {
+				await updateNodeTitle(node.id, trimmedTitle);
+			} catch (error) {
+				console.error("Failed to update title:", error);
+			}
+		}
+		setEditingNodeId(null);
+	};
+
+	const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+		handleTitleSave(e.target.value);
+	};
+
+	const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			e.preventDefault();
+			e.currentTarget.blur();
+		} else if (e.key === "Escape") {
+			e.preventDefault();
+			e.currentTarget.blur();
+			setEditingNodeId(null);
+			// Blur the parent button to remove focus state
+			(e.currentTarget.closest("button") as HTMLElement | null)?.blur();
+		}
+	};
+
 	return (
 		<Box
 			sx={{
@@ -252,17 +332,36 @@ const SideBarDocumentTreeItemButton = ({
 					isFolder ? <Folder size={16} /> : <FileText size={16} />
 				}
 			>
-				<Box
-					sx={{
-						flex: 1,
-						textAlign: "left",
-						overflow: "hidden",
-						textOverflow: "ellipsis",
-						whiteSpace: "nowrap",
-					}}
-				>
-					{node.title}
-				</Box>
+				{isEditing ? (
+					<Box
+						component="input"
+						ref={inputRef}
+						defaultValue={node.title}
+						onBlur={handleInputBlur}
+						onKeyDown={handleInputKeyDown}
+						onClick={(e) => e.stopPropagation()}
+						sx={{
+							flex: 1,
+							textAlign: "left",
+							background: "transparent",
+							padding: 0,
+							margin: 0,
+							width: "100%",
+						}}
+					/>
+				) : (
+					<Box
+						sx={{
+							flex: 1,
+							textAlign: "left",
+							overflow: "hidden",
+							textOverflow: "ellipsis",
+							whiteSpace: "nowrap",
+						}}
+					>
+						{node.title}
+					</Box>
+				)}
 			</Button>
 
 			{/* Action buttons container */}
@@ -294,6 +393,19 @@ const SideBarDocumentTreeItemButton = ({
 						<MoreHorizontal size={14} />
 					</MenuButton>
 					<Menu placement="bottom-end" size="sm">
+						{isFolder && (
+							<>
+								<MenuItem onClick={onCreateDocument}>
+									<FilePlus size={14} />
+									New document
+								</MenuItem>
+								<MenuItem onClick={onCreateFolder}>
+									<FolderPlus size={14} />
+									New folder
+								</MenuItem>
+								<ListDivider />
+							</>
+						)}
 						<MenuItem onClick={onRenameClick}>
 							<Pencil size={14} />
 							Rename
