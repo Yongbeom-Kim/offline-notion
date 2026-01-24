@@ -19,3 +19,43 @@ body {
   scroll-gutter: stable both-edges;
   scrollbar-gutter: stable both-edges;
 }
+
+/* BlockNote Editor Styling */
+.bn-editor a {
+  color: var(--joy-palette-primary-500, #0b6bcb);
+  text-decoration: underline;
+  text-decoration-color: var(--joy-palette-primary-200, #c7dff7);
+  text-underline-offset: 2px;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.bn-editor a:hover {
+  color: var(--joy-palette-primary-600, #185ea5);
+  text-decoration-color: var(--joy-palette-primary-400, #6fb3f2);
+}
+
+.bn-editor a:active {
+  color: var(--joy-palette-primary-700, #0a4785);
+}
+
+.bn-editor a:visited {
+  color: var(--joy-palette-primary-600, #185ea5);
+}
+
+/* Internal document links - subtle styling for better recognition */
+.bn-editor a[href*="/docs/"] {
+  color: var(--joy-palette-primary-500, #0b6bcb);
+  text-decoration: underline;
+  text-decoration-style: solid;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: var(--joy-palette-primary-300, #97c3f0);
+}
+
+.bn-editor a[href*="/docs/"]:hover {
+  color: var(--joy-palette-primary-600, #185ea5);
+  text-decoration-color: var(--joy-palette-primary-500, #0b6bcb);
+  background-color: var(--joy-palette-primary-50, #f0f7ff);
+  border-radius: 2px;
+  padding: 0 2px;
+  margin: 0 -2px;
+}
