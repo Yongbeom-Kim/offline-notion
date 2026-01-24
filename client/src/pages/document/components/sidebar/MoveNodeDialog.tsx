@@ -11,18 +11,17 @@ import {
 	ListItemDecorator,
 	Modal,
 	ModalDialog,
-	Stack,
 	Typography,
 } from "@mui/joy";
 import { Folder, Home } from "lucide-react";
 import { useState } from "react";
 import {
 	moveNode,
+	type NodeMetadata,
 	NodeType,
 	ROOT_PARENT_ID,
 	useGetNodeChildren,
 	useGetRootNodes,
-	type NodeMetadata,
 } from "@/db/metadata";
 
 interface MoveNodeDialogProps {
@@ -36,9 +35,12 @@ export const MoveNodeDialog = ({
 	onClose,
 	nodeToMove,
 }: MoveNodeDialogProps) => {
-	const [selectedParentId, setSelectedParentId] = useState<string>(ROOT_PARENT_ID);
+	const [selectedParentId, setSelectedParentId] =
+		useState<string>(ROOT_PARENT_ID);
 	const [isMoving, setIsMoving] = useState(false);
-	const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
+	const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
+		new Set(),
+	);
 
 	const handleMove = async () => {
 		if (selectedParentId === nodeToMove.parentId) {
@@ -81,9 +83,7 @@ export const MoveNodeDialog = ({
 		<Modal open={open} onClose={handleClose}>
 			<ModalDialog sx={{ width: 400, maxWidth: "90vw" }}>
 				<DialogTitle>
-					<Typography level="title-lg">
-						Move "{nodeToMove.title}"
-					</Typography>
+					<Typography level="title-lg">Move "{nodeToMove.title}"</Typography>
 				</DialogTitle>
 				<DialogContent>
 					<Typography level="body-sm" sx={{ mb: 2 }}>
@@ -160,10 +160,12 @@ const FolderList = ({
 	depth = 0,
 }: FolderListProps) => {
 	const { rootNodes, isLoading: isLoadingRoot } = useGetRootNodes();
-	const { children, isLoading: isLoadingChildren } = useGetNodeChildren(parentId ?? null);
+	const { children, isLoading: isLoadingChildren } = useGetNodeChildren(
+		parentId ?? null,
+	);
 
 	const isLoading = parentId ? isLoadingChildren : isLoadingRoot;
-	const nodes = parentId ? children : ((rootNodes ?? {})[NodeType.Folder] ?? []);
+	const nodes = parentId ? children : (rootNodes?.[NodeType.Folder] ?? []);
 
 	if (isLoading) {
 		return (
@@ -173,7 +175,7 @@ const FolderList = ({
 		);
 	}
 
-	// 
+	//
 	const folders = (nodes ?? []).filter(
 		(node) => node.type === NodeType.Folder && node.id !== nodeToMove.id,
 	);
@@ -240,4 +242,3 @@ const FolderList = ({
 		</>
 	);
 };
-

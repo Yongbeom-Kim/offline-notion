@@ -75,8 +75,7 @@ export const useGetNode = (id: string | null | undefined) => {
 		error,
 		isLoading,
 	};
-}
-
+};
 
 export const createNode = async (
 	title: string,
@@ -162,9 +161,7 @@ export const deleteNote = async (id: string) => {
 	});
 };
 
-const getRootNodes = async (): Promise<
-	Record<NodeType, NodeMetadata[]>
-> => {
+const getRootNodes = async (): Promise<Record<NodeType, NodeMetadata[]>> => {
 	const db = getDexieDb();
 	if (!db) {
 		throw new Error("IndexedDB is not available in this environment.");
@@ -174,7 +171,7 @@ const getRootNodes = async (): Promise<
 		.equals("__ROOT__")
 		.and((node) => node.isActive === 1)
 		.sortBy("updatedAt")
-		.then((nodes) => nodes.reverse())
+		.then((nodes) => nodes.reverse());
 
 	const grouped: Record<NodeType, NodeMetadata[]> = {
 		[NodeType.Document]: [],
@@ -192,10 +189,10 @@ export const useGetRootNodes = () => {
 	const [rootNodes, isLoading, error] = useLiveQuery(
 		async () => {
 			try {
-				const grouped = await getRootNodes()
-				return [grouped, false, null]
+				const grouped = await getRootNodes();
+				return [grouped, false, null];
 			} catch (e: unknown) {
-				return [null, false, e]
+				return [null, false, e];
 			}
 		},
 		[],
@@ -205,11 +202,13 @@ export const useGetRootNodes = () => {
 	return {
 		rootNodes,
 		isLoading,
-		error
+		error,
 	};
 };
 
-export const getNodeChildren = async (parentId: string): Promise<NodeMetadata[]> => {
+export const getNodeChildren = async (
+	parentId: string,
+): Promise<NodeMetadata[]> => {
 	const db = getDexieDb();
 	if (!db) {
 		throw new Error("IndexedDB is not available in this environment.");
@@ -229,11 +228,11 @@ export const useGetNodeChildren = (parentId: string | null) => {
 		async () => {
 			try {
 				if (parentId === null)
-					return [null, false, new Error("ParentId is null")]
-					const children = await getNodeChildren(parentId)
-					return [children, false, null]
+					return [null, false, new Error("ParentId is null")];
+				const children = await getNodeChildren(parentId);
+				return [children, false, null];
 			} catch (e: unknown) {
-				return [null, false, e]
+				return [null, false, e];
 			}
 		},
 		[parentId],
@@ -243,7 +242,7 @@ export const useGetNodeChildren = (parentId: string | null) => {
 	return {
 		children,
 		isLoading,
-		error
+		error,
 	};
 };
 
@@ -305,7 +304,7 @@ const getAllActiveDocuments = () => {
 		.and((node) => node.type === NodeType.Document)
 		.sortBy("updatedAt")
 		.then((nodes) => nodes.reverse());
-}
+};
 
 export const useGetAllActiveDocuments = () => {
 	const [documents, isLoading, error] = useLiveQuery(
@@ -324,8 +323,6 @@ export const useGetAllActiveDocuments = () => {
 	return {
 		documents,
 		isLoading,
-		error
+		error,
 	};
 };
-
-

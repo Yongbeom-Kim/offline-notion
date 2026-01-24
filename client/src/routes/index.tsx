@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Typography } from "@mui/joy";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { createNode, NodeType, useGetRootNodes } from "@/db/metadata";
 
 function LandingRedirect() {
@@ -9,7 +9,6 @@ function LandingRedirect() {
 	const [isNavCalled, setIsNavCalled] = useState(false);
 	const latestRootDocument = rootNodes?.[NodeType.Document]?.[0] ?? null;
 
-
 	useEffect(() => {
 		if (isLoading) return;
 
@@ -17,7 +16,10 @@ function LandingRedirect() {
 			if (latestRootDocument) {
 				setIsNavCalled(true);
 				// short delay between calling navigate() and actual navigation, prevent showing error screen
-				navigate({ to: "/docs/$docId", params: { docId: latestRootDocument.id } });
+				navigate({
+					to: "/docs/$docId",
+					params: { docId: latestRootDocument.id },
+				});
 				return;
 			}
 

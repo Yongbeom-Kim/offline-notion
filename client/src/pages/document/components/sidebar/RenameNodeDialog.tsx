@@ -10,7 +10,7 @@ import {
 } from "@mui/joy";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
-import { updateNodeTitle, type NodeMetadata } from "@/db/metadata";
+import { type NodeMetadata, updateNodeTitle } from "@/db/metadata";
 
 interface RenameNodeDialogProps {
 	open: boolean;
@@ -55,10 +55,7 @@ export const RenameNodeDialog = ({
 		<Modal open={open} onClose={handleClose}>
 			<ModalDialog sx={{ width: 400, maxWidth: "90vw" }}>
 				<DialogTitle>
-					<Typography
-						level="title-lg"
-						startDecorator={<Pencil size={20} />}
-					>
+					<Typography level="title-lg" startDecorator={<Pencil size={20} />}>
 						Rename
 					</Typography>
 				</DialogTitle>
@@ -92,4 +89,3 @@ export const RenameNodeDialog = ({
 		</Modal>
 	);
 };
-

@@ -19,7 +19,13 @@ import {
 	Trash2,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { deleteNote, NodeType, useGetNodeChildren, useGetRootNodes, type NodeMetadata } from "@/db/metadata";
+import {
+	deleteNote,
+	type NodeMetadata,
+	NodeType,
+	useGetNodeChildren,
+	useGetRootNodes,
+} from "@/db/metadata";
 import { useDocumentContext } from "../../context/document-context/DocumentContext";
 import { isAncestorOf } from "../../utils/document-hierarchy";
 import { MoveNodeDialog } from "./MoveNodeDialog";

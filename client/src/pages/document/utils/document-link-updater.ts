@@ -106,9 +106,7 @@ export async function updateInternalDocumentLinks(
 		}
 
 		const docIds = [...new Set(internalLinks.map((link) => link.docId))];
-		const documents = await Promise.all(
-			docIds.map((docId) => getNode(docId)),
-		);
+		const documents = await Promise.all(docIds.map((docId) => getNode(docId)));
 
 		const documentMap = new Map<string, NodeMetadata | undefined>();
 		docIds.forEach((docId, index) => {
