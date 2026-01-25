@@ -42,7 +42,11 @@ const useSidebarState = () => {
 	return [state, setState];
 };
 
-export const Sidebar = () => {
+type SidebarProps = {
+	width: number;
+};
+
+export const Sidebar = ({ width }: SidebarProps) => {
 	const [_sidebarState, _setSidebarState] = useSidebarState();
 
 	return (
@@ -57,6 +61,11 @@ export const Sidebar = () => {
 							height: "100vh",
 							display: "flex",
 							flexDirection: "column",
+							position: "fixed",
+							left: 0,
+							top: 0,
+							width: `${width}px`,
+							overflow: "auto",
 						}}
 					>
 						<Stack

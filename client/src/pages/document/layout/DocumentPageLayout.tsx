@@ -1,4 +1,5 @@
 import { Box } from "@mui/joy";
+import { useState } from "react";
 import { Sidebar } from "../components/sidebar";
 import { DocumentContextProvider } from "../context/document-context/DocumentContext";
 
@@ -7,13 +8,18 @@ interface DocumentPageLayoutProps {
 }
 
 export function DocumentPageLayout({ children }: DocumentPageLayoutProps) {
+	const [sidebarWidth, _setSidebarWidth] = useState(250);
 	return (
 		<DocumentContextProvider>
 			<Box
-				sx={{ display: "flex", flexDirection: "row", minHeight: "100vh" }}
+				sx={{
+					minHeight: "100vh",
+					minWidth: "100vw",
+					paddingLeft: `${sidebarWidth}px`,
+				}}
 				data-e2e="layout-box"
 			>
-				<Sidebar />
+				<Sidebar width={sidebarWidth} />
 				{children}
 			</Box>
 		</DocumentContextProvider>

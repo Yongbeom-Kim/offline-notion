@@ -64,7 +64,6 @@ export const SidebarDocumentTree = () => {
 			spacing={0}
 			sx={{
 				flex: 1,
-				overflowY: "auto",
 				minHeight: 0,
 			}}
 		>
@@ -196,6 +195,7 @@ const SidebarDocumentTreeChildren = ({
 	}
 
 	return (
+		// TODO: refactor to use depth prop instead of padding
 		<Box sx={{ paddingLeft: "1rem" }}>
 			{children.map((child) => (
 				<SidebarDocumentTreeItem key={child.id} node={child} />

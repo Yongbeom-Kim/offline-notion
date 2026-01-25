@@ -16,7 +16,7 @@ export const DocumentPage = () => {
 	}
 
 	return (
-		<Box sx={{ height: "100vh", width: "100vw", p: 4 }}>
+		<Box sx={{ height: "100vh", width: "100%", p: 4, overflow: "auto" }}>
 			<DocumentTitle
 				document={metadata.data ?? null}
 				isLoading={metadata.isLoading}
