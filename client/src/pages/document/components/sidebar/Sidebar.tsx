@@ -4,6 +4,7 @@ import { AddDocumentButton } from "./AddDocumentButton";
 import { AddFolderButton } from "./AddFolderButton";
 import { SidebarDocumentTree } from "./SidebarDocumentTree";
 import { SidebarEditProvider } from "./SidebarEditContext";
+import { SidebarResizeHandle } from "./SidebarResizeHandle";
 
 export const Sidebar = () => {
 	const { sidebarState } = useDocumentPageLayoutContext();
@@ -15,6 +16,7 @@ export const Sidebar = () => {
 					<Card
 						sx={{
 							padding: "24px 16px",
+							paddingRight: "22px", // Extra padding for resize handle
 							bgcolor: "Background",
 							zIndex: 10,
 							height: "100vh",
@@ -24,6 +26,7 @@ export const Sidebar = () => {
 							left: 0,
 							top: 0,
 							width: `${sidebarState.width}px`,
+							overflow: "visible",
 						}}
 					>
 						<Stack
@@ -60,6 +63,8 @@ export const Sidebar = () => {
 								<AddFolderButton />
 							</Stack>
 						</Stack>
+
+						<SidebarResizeHandle />
 					</Card>
 				</nav>
 			</aside>
