@@ -63,13 +63,7 @@ export const SidebarDocumentTree = () => {
 		observer.observe(docTreeRef.current);
 
 		return () => observer.disconnect();
-	}, [
-		sidebarState.computeWidthOnMount,
-		setSidebarState,
-		isLoading,
-		error,
-		rootNodes,
-	]);
+	}, [sidebarState.computeWidthOnMount, setSidebarState]);
 
 	if (isLoading) {
 		return (
