@@ -1,6 +1,6 @@
 import { Box } from "@mui/joy";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useDocumentPageLayoutContext } from "../../layout/context/DockmentPageLayoutContext";
+import { useDocumentPageLayoutContext } from "../../layout/context/DocumentPageLayoutContext";
 
 const MIN_SIDEBAR_WIDTH = 200;
 const MAX_SIDEBAR_WIDTH = 500;

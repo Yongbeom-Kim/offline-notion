@@ -4,7 +4,7 @@ import { DocumentContextProvider } from "../context/document-context/DocumentCon
 import {
 	DocumentPageLayoutContextProvider,
 	useDocumentPageLayoutContext,
-} from "./context/DockmentPageLayoutContext";
+} from "./context/DocumentPageLayoutContext";
 
 interface DocumentPageLayoutProps {
 	children: React.ReactNode;

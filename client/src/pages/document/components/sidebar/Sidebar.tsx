@@ -1,5 +1,5 @@
 import { Card, Divider, Stack, Typography } from "@mui/joy";
-import { useDocumentPageLayoutContext } from "../../layout/context/DockmentPageLayoutContext";
+import { useDocumentPageLayoutContext } from "../../layout/context/DocumentPageLayoutContext";
 import { AddDocumentButton } from "./AddDocumentButton";
 import { AddFolderButton } from "./AddFolderButton";
 import { SidebarDocumentTree } from "./SidebarDocumentTree";

@@ -32,7 +32,7 @@ import {
 	useGetRootNodes,
 } from "@/db/metadata";
 import { useDocumentContext } from "../../context/document-context/DocumentContext";
-import { useDocumentPageLayoutContext } from "../../layout/context/DockmentPageLayoutContext";
+import { useDocumentPageLayoutContext } from "../../layout/context/DocumentPageLayoutContext";
 import { isAncestorOf } from "../../utils/document-hierarchy";
 import { MoveNodeDialog } from "./MoveNodeDialog";
 import { RenameNodeDialog } from "./RenameNodeDialog";
