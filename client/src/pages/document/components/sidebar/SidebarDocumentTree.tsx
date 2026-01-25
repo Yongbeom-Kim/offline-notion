@@ -21,7 +21,7 @@ import {
 	Pencil,
 	Trash2,
 } from "lucide-react";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
 	createNode,
 	deleteNote,
@@ -40,37 +40,7 @@ import { useSidebarEdit } from "./SidebarEditContext";
 
 export const SidebarDocumentTree = () => {
 	const { rootNodes, isLoading, error } = useGetRootNodes();
-	const { sidebarState, setSidebarState } = useDocumentPageLayoutContext();
-	const docTreeRef = useRef<HTMLDivElement | null>(null);
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: Additional dependencies needed to force calculation after loading/error state
-	useLayoutEffect(() => {
-		if (!docTreeRef.current) return;
-		if (!sidebarState.computeWidthOnMount) return;
-
-		const observer = new ResizeObserver(() => {
-			const el = docTreeRef.current;
-			if (!el) return;
-
-			const gap = Math.max(el.scrollWidth - el.clientWidth, 0);
-			if (gap === 0) return;
-
-			setSidebarState((state) => ({
-				...state,
-				width: state.width + gap,
-			}));
-		});
-
-		observer.observe(docTreeRef.current);
-
-		return () => observer.disconnect();
-	}, [
-		sidebarState.computeWidthOnMount,
-		setSidebarState,
-		isLoading,
-		error,
-		rootNodes,
-	]);
+	const { observeOverflowOnRef } = useDocumentPageLayoutContext();
 
 	if (isLoading) {
 		return (
@@ -100,7 +70,7 @@ export const SidebarDocumentTree = () => {
 				minHeight: 0,
 				overflow: "auto",
 			}}
-			ref={docTreeRef}
+			ref={observeOverflowOnRef}
 		>
 			{rootNodes[NodeType.Folder].map((node) => (
 				<SidebarDocumentTreeItem key={node.id} node={node} />
