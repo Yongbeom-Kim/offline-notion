@@ -1,53 +1,12 @@
 import { Card, Divider, Stack, Typography } from "@mui/joy";
-import { useEffect, useState } from "react";
-import { useMediaQuery } from "@/hooks/use-media-query";
+import { useDocumentPageLayoutContext } from "../../layout/context/DockmentPageLayoutContext";
 import { AddDocumentButton } from "./AddDocumentButton";
 import { AddFolderButton } from "./AddFolderButton";
 import { SidebarDocumentTree } from "./SidebarDocumentTree";
 import { SidebarEditProvider } from "./SidebarEditContext";
 
-const SIDEBAR_STATE_LOCALSTORAGE_KEY = "SIDEBAR_STATE";
-
-type SidebarState = {
-	expanded: boolean;
-};
-
-const useSidebarState = () => {
-	const isLargeScreen = useMediaQuery({
-		query: "(min-width: 64rem)",
-		ssrFallbackResult: false,
-	});
-
-	const getInitialSidebarState = (): SidebarState => {
-		if (
-			typeof window === "undefined" ||
-			localStorage.getItem(SIDEBAR_STATE_LOCALSTORAGE_KEY) === null
-		) {
-			return {
-				expanded: isLargeScreen,
-			};
-		}
-
-		return JSON.parse(
-			localStorage.getItem(SIDEBAR_STATE_LOCALSTORAGE_KEY) ?? "",
-		) as SidebarState;
-	};
-
-	const [state, setState] = useState<SidebarState>(getInitialSidebarState);
-
-	useEffect(() => {
-		localStorage.setItem(SIDEBAR_STATE_LOCALSTORAGE_KEY, JSON.stringify(state));
-	}, [state]);
-
-	return [state, setState];
-};
-
-type SidebarProps = {
-	width: number;
-};
-
-export const Sidebar = ({ width }: SidebarProps) => {
-	const [_sidebarState, _setSidebarState] = useSidebarState();
+export const Sidebar = () => {
+	const { sidebarState } = useDocumentPageLayoutContext();
 
 	return (
 		<SidebarEditProvider>
@@ -64,18 +23,19 @@ export const Sidebar = ({ width }: SidebarProps) => {
 							position: "fixed",
 							left: 0,
 							top: 0,
-							width: `${width}px`,
-							overflow: "auto",
+							width: `${sidebarState.width}px`,
 						}}
 					>
 						<Stack
 							direction="column"
 							spacing={2}
 							sx={{
-								flex: 1,
+								flex: 0,
 								justifyContent: "flex-start",
 								alignItems: "stretch",
+								height: "100%",
 							}}
+							data-e2e="sidebar-stack"
 						>
 							<Typography
 								level="h3"

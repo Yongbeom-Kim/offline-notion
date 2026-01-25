@@ -1,27 +1,38 @@
 import { Box } from "@mui/joy";
-import { useState } from "react";
 import { Sidebar } from "../components/sidebar";
 import { DocumentContextProvider } from "../context/document-context/DocumentContext";
+import {
+	DocumentPageLayoutContextProvider,
+	useDocumentPageLayoutContext,
+} from "./context/DockmentPageLayoutContext";
 
 interface DocumentPageLayoutProps {
 	children: React.ReactNode;
 }
 
-export function DocumentPageLayout({ children }: DocumentPageLayoutProps) {
-	const [sidebarWidth, _setSidebarWidth] = useState(250);
+export const DocumentPageLayout = (props: DocumentPageLayoutProps) => {
 	return (
 		<DocumentContextProvider>
-			<Box
-				sx={{
-					minHeight: "100vh",
-					minWidth: "100vw",
-					paddingLeft: `${sidebarWidth}px`,
-				}}
-				data-e2e="layout-box"
-			>
-				<Sidebar width={sidebarWidth} />
-				{children}
-			</Box>
+			<DocumentPageLayoutContextProvider>
+				<_DocumentPageLayout {...props}></_DocumentPageLayout>
+			</DocumentPageLayoutContextProvider>
 		</DocumentContextProvider>
 	);
-}
+};
+
+const _DocumentPageLayout = ({ children }: DocumentPageLayoutProps) => {
+	const { sidebarState } = useDocumentPageLayoutContext();
+	return (
+		<Box
+			sx={{
+				minHeight: "100vh",
+				minWidth: "100vw",
+				paddingLeft: `${sidebarState.width}px`,
+			}}
+			data-e2e="layout-box"
+		>
+			<Sidebar />
+			{children}
+		</Box>
+	);
+};

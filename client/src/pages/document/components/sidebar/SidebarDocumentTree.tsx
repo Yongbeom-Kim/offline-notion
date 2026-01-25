@@ -21,7 +21,7 @@ import {
 	Pencil,
 	Trash2,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
 	createNode,
 	deleteNote,
@@ -32,6 +32,7 @@ import {
 	useGetRootNodes,
 } from "@/db/metadata";
 import { useDocumentContext } from "../../context/document-context/DocumentContext";
+import { useDocumentPageLayoutContext } from "../../layout/context/DockmentPageLayoutContext";
 import { isAncestorOf } from "../../utils/document-hierarchy";
 import { MoveNodeDialog } from "./MoveNodeDialog";
 import { RenameNodeDialog } from "./RenameNodeDialog";
@@ -39,6 +40,30 @@ import { useSidebarEdit } from "./SidebarEditContext";
 
 export const SidebarDocumentTree = () => {
 	const { rootNodes, isLoading, error } = useGetRootNodes();
+	const { sidebarState, setSidebarState } = useDocumentPageLayoutContext();
+	const docTreeRef = useRef<HTMLDivElement | null>(null);
+
+	useLayoutEffect(() => {
+		if (!docTreeRef.current) return;
+		if (!sidebarState.computeWidthOnMount) return;
+
+		const observer = new ResizeObserver(() => {
+			const el = docTreeRef.current;
+			if (!el) return;
+
+			const gap = Math.max(el.scrollWidth - el.clientWidth, 0);
+			if (gap === 0) return;
+
+			setSidebarState((state) => ({
+				...state,
+				width: state.width + gap,
+			}));
+		});
+
+		observer.observe(docTreeRef.current);
+
+		return () => observer.disconnect();
+	}, [sidebarState.computeWidthOnMount, setSidebarState]);
 
 	if (isLoading) {
 		return (
@@ -64,8 +89,11 @@ export const SidebarDocumentTree = () => {
 			spacing={0}
 			sx={{
 				flex: 1,
+				flexShrink: 1,
 				minHeight: 0,
+				overflow: "auto",
 			}}
+			ref={docTreeRef}
 		>
 			{rootNodes[NodeType.Folder].map((node) => (
 				<SidebarDocumentTreeItem key={node.id} node={node} />
