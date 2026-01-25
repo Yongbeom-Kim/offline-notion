@@ -43,6 +43,7 @@ export const SidebarDocumentTree = () => {
 	const { sidebarState, setSidebarState } = useDocumentPageLayoutContext();
 	const docTreeRef = useRef<HTMLDivElement | null>(null);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Additional dependencies needed to force calculation after loading/error state
 	useLayoutEffect(() => {
 		if (!docTreeRef.current) return;
 		if (!sidebarState.computeWidthOnMount) return;
