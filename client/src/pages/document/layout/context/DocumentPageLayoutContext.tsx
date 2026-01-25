@@ -38,8 +38,6 @@ export const DocumentPageLayoutContextProvider = ({
 
 	const observeOverflowOnRef = useCallback((el: HTMLElement | null) => {
 		if (!el) return;
-
-		// If already observing this element, skip
 		if (observersMap.current.has(el)) return;
 
 		const observer = new ResizeObserver(() => {
