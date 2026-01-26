@@ -1,5 +1,5 @@
 import { useParams } from "@tanstack/react-router";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect } from "react";
 import { type NodeMetadata, useGetNode } from "@/db/metadata";
 
 type DocumentContextType = {
@@ -27,6 +27,14 @@ export const DocumentContextProvider = ({
 	const documentId = (params as { docId?: string }).docId || null;
 
 	const metadata = useGetNode(documentId);
+
+	useEffect(() => {
+		if (metadata.data?.title) {
+			document.title = metadata.data.title;
+		} else {
+			document.title = "Offline Notion";
+		}
+	}, [metadata.data?.title]);
 
 	return (
 		<DocumentContext.Provider value={{ metadata }}>
