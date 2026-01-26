@@ -2,6 +2,7 @@ import {
 	createContext,
 	useCallback,
 	useContext,
+	useEffect,
 	useRef,
 	useState,
 } from "react";
@@ -9,6 +10,7 @@ import {
 type SidebarState = {
 	isExpanded: boolean;
 	width: number;
+	optimalWidth: number;
 	computeWidthOnOverflow: boolean;
 };
 
@@ -29,6 +31,7 @@ export const DocumentPageLayoutContextProvider = ({
 	const [sidebarState, setSidebarState] = useState<SidebarState>({
 		isExpanded: true,
 		width: 200,
+		optimalWidth: 200,
 		computeWidthOnOverflow: true,
 	});
 
@@ -36,18 +39,26 @@ export const DocumentPageLayoutContextProvider = ({
 		new WeakMap(),
 	);
 
+	const computeWidthOnOverflowRef = useRef(sidebarState.computeWidthOnOverflow);
+
+	useEffect(() => {
+		computeWidthOnOverflowRef.current = sidebarState.computeWidthOnOverflow;
+	}, [sidebarState]);
+
 	const observeOverflowOnRef = useCallback((el: HTMLElement | null) => {
 		if (!el) return;
 		if (observersMap.current.has(el)) return;
 
 		const observer = new ResizeObserver(() => {
 			if (!el.scrollWidth || !el.clientWidth) return;
+			if (!computeWidthOnOverflowRef.current) return;
 			const gap = Math.max(el.scrollWidth - el.clientWidth, 0);
 			if (gap === 0) return;
 
 			setSidebarState((state) => ({
 				...state,
 				width: state.width + gap,
+				optimalWidth: state.width + gap,
 			}));
 		});
 
