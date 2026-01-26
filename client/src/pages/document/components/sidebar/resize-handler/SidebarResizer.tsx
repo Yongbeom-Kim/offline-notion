@@ -7,6 +7,7 @@ const MAX_SIDEBAR_WIDTH = 500;
 
 // TODO: Performance Sucks (https://docs.yongbeom.com/docs/019bf109-bc3d-732c-88f1-d8607460cfff)
 // Update DOM live, and then call setState at the end once only.
+// TODO: accessibility + keyboard nav
 export const SidebarResizeHandler = () => {
 	const { setSidebarState } = useDocumentPageLayoutContext();
 	const isDraggingRef = useRef(false);
