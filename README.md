@@ -1,51 +1,95 @@
 # Offline Notion
 
-Offline notion project, inspired by Hans
+Offline-First Notion Alternative
+## 🛠️ Tech Stack
 
-## Quick Start
+### Frontend
+| Technology | Purpose |
+|------------|---------|
+| [React 19](https://react.dev/) | UI library |
+| [TanStack Start](https://tanstack.com/start) | Full-stack React framework |
+| [TanStack Router](https://tanstack.com/router) | Type-safe file-based routing |
+| [TanStack Query](https://tanstack.com/query) | Server state management |
+| [BlockNote](https://www.blocknotejs.org/) | Block-based rich text editor |
+| [Yjs](https://yjs.dev/) | CRDT for real-time collaboration |
+| [Dexie](https://dexie.org/) | IndexedDB wrapper for offline storage |
+| [MUI Joy](https://mui.com/joy-ui/) | Component library |
+| [Tailwind CSS](https://tailwindcss.com/) | Utility-first styling |
+| [Vite](https://vite.dev/) | Build tool |
 
-### Development (Docker)
+### Backend
+| Technology | Purpose |
+|------------|---------|
+| [Go](https://go.dev/) | Backend server |
+| [VoidAuth](https://github.com/voidauth/voidauth) | Authentication |
+| [Caddy](https://caddyserver.com/) | Reverse proxy with automatic HTTPS |
+
+### Infrastructure
+| Technology | Purpose |
+|------------|---------|
+| [Docker](https://www.docker.com/) | Containerization |
+| [OpenTofu](https://opentofu.org/) / Terraform | Infrastructure as Code |
+| [AWS Route53](https://aws.amazon.com/route53/) | DNS management |
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) and Docker Compose
+- Make
+
+### Development Setup
 
 ```bash
-# Install precommit hooks
+# 1. Clone the repository
+git clone https://github.com/Yongbeom-Kim/offline-notion.git
+cd offline-notion
+
+# 2. Install pre-commit hooks
 make setup
-# Generate secrets
+
+# 3. Generate environment secrets
 make gen_env
-# Start development mode with hot reload
+
+# 4. Start development containers with hot reload
 make dev
 ```
 
-The frontend will be available on [`localhost:3000`](http://localhost:3000).
-Authentik (auth) will be available on [`localhost:9000`](http://localhost:9000).
+The application will be available at:
+- **Frontend**: [http://localhost:3000](http://localhost:3000)
+- **Backend API**: [http://localhost:3001](http://localhost:3001)
+- **VoidAuth**: [http://localhost:3002](http://localhost:3002)
 
-Development mode mounts your local `client/` directory for live code changes.
+Development mode mounts your local directories for live code changes with hot reload.
 
-## Prerequisites
+### Production Setup
 
-- Docker and Docker Compose
+1. Set up an ubuntu server somewhere (I'm a Hetzner fan)
+2. Get your ipv4 and ipv6, update .env
+3. Run the setup script on your server
+4. Set up DNS (`make tofu_*`)
+5. `make start` (or `make start_detached`)
 
-## Makefile Commands
+## 🔧 Makefile Commands
 
 | Command | Description |
 |---------|-------------|
 | `make setup` | Configure pre-commit hooks |
+| `make gen_env` | Generate environment secrets |
+| `make gen_test_env` | Generate test environment with simple secrets |
+| `make dev` | Start development containers with hot reload |
 | `make start` | Start production containers (foreground) |
 | `make start_detached` | Start production containers (background) |
-| `make dev` | Start development containers with hot reload |
-| `make stop` | Stop production containers |
-| `make stop-dev` | Stop development containers |
+| `make stop` | Stop all containers |
+| `make docker-prune` | Clean up Docker system |
 
-## Project Structure
+### Infrastructure Commands
 
-```
-.
-├── client/              # React / TanStack Start frontend application
-├── docker-compose.yml          # Production services
-├── docker-compose.dev.yml      # Development overrides
-├── Makefile                     # Convenient commands
-└── .env                         # Environment configuration
-```
-
-## Client Documentation
-
-For detailed information about the frontend application, see [client/README.md](client/README.md).
+| Command | Description |
+|---------|-------------|
+| `make tofu-init` | Initialize OpenTofu |
+| `make tofu-plan` | Plan infrastructure changes |
+| `make tofu-apply` | Apply infrastructure changes |
+| `make tofu-destroy` | Destroy infrastructure |
+| `make ssh_root` | SSH to server as root |
+| `make ssh_app` | SSH to server as app user |
