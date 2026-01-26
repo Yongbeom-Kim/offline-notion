@@ -33,13 +33,19 @@ docker-prune:
 	docker system prune -a
 
 tofu-init:
-	cd infra && tofu init
+	set -a && . ./.env && set +a && cd infra && tofu init
 
 tofu-plan:
-	cd infra && tofu plan
+	set -a && . ./.env && set +a && cd infra && tofu plan
 
 tofu-apply:
-	cd infra && tofu apply -auto-approve
+	set -a && . ./.env && set +a && cd infra && tofu apply -auto-approve
 
 tofu-destroy:
-	cd infra && tofu destroy -auto-approve
+	set -a && . ./.env && set +a && cd infra && tofu destroy -auto-approve
+
+ssh_root:
+	set -a && . ./.env && set +a && ssh "root@$${PUBLIC_IPV4}"
+
+ssh_app:
+	set -a && . ./.env && set +a && ssh "app@$${PUBLIC_IPV4}"
