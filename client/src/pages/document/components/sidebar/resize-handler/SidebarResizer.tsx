@@ -10,13 +10,21 @@ const MAX_SIDEBAR_WIDTH = 500;
 export const SidebarResizeHandler = () => {
 	const { setSidebarState } = useDocumentPageLayoutContext();
 	const isDraggingRef = useRef(false);
-	const lastMouseX = useRef(0);
+	const startingStateRef = useRef({
+		mouseXPos: 0,
+		sidebarWidth: 0,
+	});
 
 	const onMouseDown = useCallback<React.MouseEventHandler<HTMLDivElement>>(
 		(ev) => {
 			isDraggingRef.current = true;
-			lastMouseX.current = ev.clientX;
-			setSidebarState((prev) => ({ ...prev, computeWidthOnOverflow: false }));
+			setSidebarState((prev) => {
+				startingStateRef.current = {
+					mouseXPos: ev.clientX,
+					sidebarWidth: prev.width,
+				};
+				return { ...prev, computeWidthOnOverflow: false };
+			});
 		},
 		[setSidebarState],
 	);
@@ -35,22 +43,18 @@ export const SidebarResizeHandler = () => {
 	const onMouseMove = useCallback(
 		(ev: MouseEvent) => {
 			if (!isDraggingRef.current) return;
-			const delta = ev.clientX - lastMouseX.current;
-			setSidebarState((prev) => {
-				const nextWidth = prev.width + delta;
-				const isInBound =
-					nextWidth >= MIN_SIDEBAR_WIDTH && nextWidth <= MAX_SIDEBAR_WIDTH;
-				if (!isInBound) return prev;
-				lastMouseX.current = ev.clientX;
-				const width = Math.max(
-					MIN_SIDEBAR_WIDTH,
-					Math.min(MAX_SIDEBAR_WIDTH, nextWidth),
-				);
-				return {
-					...prev,
-					width,
-				};
-			});
+			const newSidebarWidth =
+				ev.clientX -
+				startingStateRef.current.mouseXPos +
+				startingStateRef.current.sidebarWidth;
+			const newSidebarWidthClamped = Math.max(
+				MIN_SIDEBAR_WIDTH,
+				Math.min(MAX_SIDEBAR_WIDTH, newSidebarWidth),
+			);
+			setSidebarState((prev) => ({
+				...prev,
+				width: newSidebarWidthClamped,
+			}));
 		},
 		[setSidebarState],
 	);
