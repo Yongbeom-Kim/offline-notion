@@ -6,7 +6,7 @@ const MIN_SIDEBAR_WIDTH = 200;
 const MAX_SIDEBAR_WIDTH = 500;
 
 export const SidebarResizeHandle = () => {
-	const { sidebarState, setSidebarState, saveSidebarState } =
+	const { sidebarState, setSidebarState } =
 		useDocumentPageLayoutContext();
 	const [isResizing, setIsResizing] = useState(false);
 	const resizeRef = useRef<{
@@ -54,7 +54,6 @@ export const SidebarResizeHandle = () => {
 					...prev,
 					computeWidthOnMount: false,
 				};
-				saveSidebarState(newState);
 				return newState;
 			});
 		};
@@ -66,7 +65,7 @@ export const SidebarResizeHandle = () => {
 			document.removeEventListener("mousemove", handleMouseMove);
 			document.removeEventListener("mouseup", handleMouseUp);
 		};
-	}, [isResizing, setSidebarState, saveSidebarState]);
+	}, [isResizing, setSidebarState]);
 
 	return (
 		<Box
