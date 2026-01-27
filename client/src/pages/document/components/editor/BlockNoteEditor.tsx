@@ -8,10 +8,11 @@ import {
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import * as Y from "yjs";
 import { updateInternalDocumentLinks } from "@/pages/document/utils/document-link-updater";
 import { pasteHandler } from "@/pages/document/utils/paste-handler";
+import { getRandomCursorColor } from "@/utils/color";
 import { EditorDialogProvider, useEditorDialog } from "./slash-commands";
 import { createCustomSlashMenuItems } from "./slash-commands/custom-slash-menu-items";
 // import { IndexeddbPersistence } from "y-indexeddb";
@@ -20,16 +21,33 @@ import { OfflineNotionProvider } from "./y-provider";
 type BlockNoteEditorProps = { documentId: string };
 
 interface BlockNoteEditorInnerProps {
-	editor: ReturnType<typeof useCreateBlockNote>;
+	persistence: OfflineNotionProvider;
+	doc: Y.Doc;
 }
 
-function BlockNoteEditorInner({ editor }: BlockNoteEditorInnerProps) {
+function BlockNoteEditorInner({ persistence, doc }: BlockNoteEditorInnerProps) {
 	const { openCreateDocumentDialog, openLinkDocumentDialog } =
 		useEditorDialog();
+
+	const userColor = useMemo(() => getRandomCursorColor(), []);
+
+	const editor = useCreateBlockNote({
+		collaboration: {
+			provider: persistence,
+			fragment: doc.getXmlFragment("document-store"),
+			user: { name: "You", color: userColor },
+			showCursorLabels: "activity",
+		},
+		pasteHandler: pasteHandler,
+	});
 
 	const customSlashItems = createCustomSlashMenuItems(editor, {
 		openCreateDocumentDialog,
 		openLinkDocumentDialog,
+	});
+
+	persistence.once("synced", async () => {
+		await updateInternalDocumentLinks(editor, window.location.origin);
 	});
 
 	return (
@@ -57,31 +75,23 @@ function BlockNoteEditorInner({ editor }: BlockNoteEditorInnerProps) {
 export function BlockNoteEditor({ documentId }: BlockNoteEditorProps) {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: documentId is needed to recreate doc per document
 	const doc = useMemo(() => new Y.Doc(), [documentId]);
-
-	const editor = useCreateBlockNote({
-		collaboration: {
-			fragment: doc.getXmlFragment("document-store"),
-			user: { name: "Offline Notion", color: "#0ea5e9" },
-			showCursorLabels: "activity",
-		},
-		pasteHandler: pasteHandler,
-	});
+	const [persistence, setPersistence] =
+		useState<OfflineNotionProvider | null>();
 
 	useEffect(() => {
 		const persistence = new OfflineNotionProvider(`doc-${documentId}`, doc);
-
-		persistence.once("synced", async () => {
-			await updateInternalDocumentLinks(editor, window.location.origin);
-		});
+		setPersistence(persistence);
 
 		return () => {
 			persistence.destroy();
 		};
-	}, [documentId, doc, editor]);
+	}, [documentId, doc]);
 
 	return (
 		<EditorDialogProvider>
-			<BlockNoteEditorInner editor={editor} />
+			{persistence && (
+				<BlockNoteEditorInner persistence={persistence} doc={doc} />
+			)}
 		</EditorDialogProvider>
 	);
 }

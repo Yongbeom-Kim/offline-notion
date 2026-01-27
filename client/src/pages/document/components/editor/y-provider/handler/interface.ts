@@ -1,3 +1,4 @@
+import type { Awareness } from "y-protocols/awareness.js";
 import type * as Y from "yjs";
 
 export interface UpdateHandler {
@@ -6,4 +7,8 @@ export interface UpdateHandler {
 	broadcastUpdate(update: Uint8Array): Promise<void>;
 	onUpdateReceived(callback: (update: Uint8Array) => void): void;
 	destroy(): Promise<void>;
+}
+
+export interface AwarenessHandler {
+	registerAwareness(awareness: Awareness): void;
 }

@@ -1,6 +1,8 @@
 import { ObservableV2 } from "lib0/observable";
+import * as awarenessProtocol from "y-protocols/awareness.js";
 import * as Y from "yjs";
 import {
+	type AwarenessHandler,
 	BroadcastChannelHandler,
 	IndexedDbHandler,
 	type UpdateHandler,
@@ -15,11 +17,15 @@ export class OfflineNotionProvider extends ObservableV2<{
 	docId: string;
 	doc: Y.Doc;
 	handlers: UpdateHandler[];
+	awareness: awarenessProtocol.Awareness;
 
 	constructor(docId: string, doc: Y.Doc) {
 		super();
 		const indexedDbHandler = new IndexedDbHandler(docId, INTERNAL_ORIGIN);
-		const broadcastChannelHandler = new BroadcastChannelHandler(docId);
+		const broadcastChannelHandler = new BroadcastChannelHandler(
+			docId,
+			INTERNAL_ORIGIN,
+		);
 
 		this.handlers = [indexedDbHandler, broadcastChannelHandler];
 
@@ -27,6 +33,15 @@ export class OfflineNotionProvider extends ObservableV2<{
 		this.doc = doc;
 
 		this.doc.on("update", this.handleDocUpdate);
+		this.awareness = new awarenessProtocol.Awareness(doc);
+
+		// Register awareness with handlers that support it
+		for (const handler of this.handlers) {
+			if (this._isAwarenessHandler(handler)) {
+				handler.registerAwareness(this.awareness);
+			}
+		}
+
 		broadcastChannelHandler.onUpdateReceived(this.handleBroadcastUpdate);
 		this.on("error", () => this.destroy());
 
@@ -67,6 +82,15 @@ export class OfflineNotionProvider extends ObservableV2<{
 
 	_writeUpdateToDoc(update: Uint8Array) {
 		Y.applyUpdate(this.doc, update, INTERNAL_ORIGIN);
+	}
+
+	private _isAwarenessHandler(
+		handler: UpdateHandler,
+	): handler is UpdateHandler & AwarenessHandler {
+		return (
+			"registerAwareness" in handler &&
+			typeof (handler as AwarenessHandler).registerAwareness === "function"
+		);
 	}
 
 	async destroy(): Promise<void> {
