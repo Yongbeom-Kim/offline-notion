@@ -1,7 +1,7 @@
 import { Button, Card, Input, Stack, Typography } from "@mui/joy";
 import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { deleteNote, type NodeMetadata, updateNodeTitle } from "@/db/metadata";
+import { deleteNote, type NodeMetadata, updateNodeTitle } from "@/integrations/db/metadata";
 
 type DocumentDetailsCardProps = {
 	document: NodeMetadata | null;

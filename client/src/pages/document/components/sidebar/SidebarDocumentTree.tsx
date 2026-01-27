@@ -30,7 +30,7 @@ import {
 	updateNodeTitle,
 	useGetNodeChildren,
 	useGetRootNodes,
-} from "@/db/metadata";
+} from "@/integrations/db/metadata";
 import { useDocumentContext } from "../../context/document-context/DocumentContext";
 import { useDocumentPageLayoutContext } from "../../layout/context/DocumentPageLayoutContext";
 import { isAncestorOf } from "../../utils/document-hierarchy";

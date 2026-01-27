@@ -22,7 +22,7 @@ import {
 	ROOT_PARENT_ID,
 	useGetNodeChildren,
 	useGetRootNodes,
-} from "@/db/metadata";
+} from "@/integrations/db/metadata";
 
 interface MoveNodeDialogProps {
 	open: boolean;

@@ -17,7 +17,7 @@ import {
 } from "@mui/joy";
 import { FileText, Search } from "lucide-react";
 import { useState } from "react";
-import { type NodeMetadata, useGetAllActiveDocuments } from "@/db/metadata";
+import { type NodeMetadata, useGetAllActiveDocuments } from "@/integrations/db/metadata";
 
 interface LinkDocumentDialogProps {
 	open: boolean;

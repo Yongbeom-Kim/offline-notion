@@ -1,4 +1,4 @@
-import { getNode, ROOT_PARENT_ID } from "@/db/metadata";
+import { getNode, ROOT_PARENT_ID } from "@/integrations/db/metadata";
 
 /**
  * Check if a node is an ancestor of another node by walking up the parent chain

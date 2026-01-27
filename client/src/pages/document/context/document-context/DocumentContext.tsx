@@ -1,6 +1,6 @@
 import { useParams } from "@tanstack/react-router";
 import { createContext, useContext, useEffect } from "react";
-import { type NodeMetadata, useGetNode } from "@/db/metadata";
+import { type NodeMetadata, useGetNode } from "@/integrations/db/metadata";
 
 type DocumentContextType = {
 	metadata: {

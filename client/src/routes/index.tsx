@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Typography } from "@mui/joy";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { createNode, NodeType, useGetRootNodes } from "@/db/metadata";
+import { createNode, NodeType, useGetRootNodes } from "@/integrations/db/metadata";
 
 function LandingRedirect() {
 	const navigate = useNavigate();

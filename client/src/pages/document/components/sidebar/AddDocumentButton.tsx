@@ -2,7 +2,7 @@ import { Button, Typography } from "@mui/joy";
 import { useNavigate } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { createNode, NodeType } from "@/db/metadata";
+import { createNode, NodeType } from "@/integrations/db/metadata";
 import { useSidebarEdit } from "./SidebarEditContext";
 
 export const AddDocumentButton = () => {

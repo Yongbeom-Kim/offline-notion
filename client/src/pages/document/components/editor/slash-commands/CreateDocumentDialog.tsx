@@ -11,7 +11,7 @@ import {
 } from "@mui/joy";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { createNode, NodeType } from "@/db/metadata";
+import { createNode, NodeType } from "@/integrations/db/metadata";
 
 interface CreateDocumentDialogProps {
 	open: boolean;

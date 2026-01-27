@@ -10,7 +10,7 @@ import {
 } from "@mui/joy";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
-import { type NodeMetadata, updateNodeTitle } from "@/db/metadata";
+import { type NodeMetadata, updateNodeTitle } from "@/integrations/db/metadata";
 
 interface RenameNodeDialogProps {
 	open: boolean;

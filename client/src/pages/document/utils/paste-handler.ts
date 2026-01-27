@@ -1,5 +1,5 @@
 import type { BlockNoteEditor } from "@blocknote/core";
-import { getNode } from "@/db/metadata";
+import { getNode } from "@/integrations/db/metadata";
 import { extractDocumentId, isInternalDocumentUrl } from "../../../utils/url";
 
 interface PasteHandlerContext {

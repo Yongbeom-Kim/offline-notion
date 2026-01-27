@@ -1,5 +1,5 @@
 import type { Block, BlockNoteEditor } from "@blocknote/core";
-import { getNode, type NodeMetadata } from "@/db/metadata";
+import { getNode, type NodeMetadata } from "@/integrations/db/metadata";
 import { extractDocumentId, isInternalDocumentHref } from "../../../utils/url";
 
 /**

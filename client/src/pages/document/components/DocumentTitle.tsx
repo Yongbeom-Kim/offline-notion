@@ -1,6 +1,6 @@
 import { Typography } from "@mui/joy";
 import { useCallback } from "react";
-import { type NodeMetadata, updateNodeTitle } from "@/db/metadata";
+import { type NodeMetadata, updateNodeTitle } from "@/integrations/db/metadata";
 
 type DocumentTitleProps = {
 	document: NodeMetadata | null;
