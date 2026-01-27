@@ -1,8 +1,8 @@
-import { Button, Typography } from "@mui/joy";
 import { FolderPlus } from "lucide-react";
 import { useState } from "react";
 import { createNode, NodeType } from "@/integrations/db/metadata";
 import { useSidebarEdit } from "../SidebarEditContext";
+import { BaseSidebarButton } from "./BaseSidebarButton";
 
 export const AddFolderButton = () => {
 	const [isCreating, setIsCreating] = useState(false);
@@ -21,36 +21,11 @@ export const AddFolderButton = () => {
 	};
 
 	return (
-		<Button
+		<BaseSidebarButton
 			onClick={handleCreateFolder}
-			variant="plain"
-			color="neutral"
-			loading={isCreating}
-			sx={{
-				justifyContent: "flex-start",
-				pl: 2,
-				pr: 2,
-				py: 1,
-				minHeight: "32px",
-				borderRadius: "4px",
-				"&:hover": {
-					bgcolor: "background.level1",
-				},
-				"&:disabled": {
-					color: "text.tertiary",
-				},
-			}}
-			startDecorator={<FolderPlus size={16} />}
-		>
-			<Typography
-				level="body-sm"
-				sx={{
-					color: "text.tertiary",
-					fontWeight: 400,
-				}}
-			>
-				Add folder
-			</Typography>
-		</Button>
+			isLoading={isCreating}
+			buttonStartDecorator={<FolderPlus size={16} />}
+			buttonText="Add folder"
+		/>
 	);
 };
