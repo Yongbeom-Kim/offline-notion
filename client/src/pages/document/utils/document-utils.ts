@@ -2,7 +2,7 @@ import { type Block, BlockNoteEditor } from "@blocknote/core";
 import { yXmlFragmentToBlocks } from "@blocknote/core/yjs";
 // import { IndexeddbPersistence } from "y-indexeddb";
 import * as Y from "yjs";
-import { OfflineNotionProvider } from "../components/editor/y-provider/provider";
+import { OfflineNotionProvider } from "../components/editor/y-provider";
 
 /**
  * Get document content as BlockNote blocks from a document ID

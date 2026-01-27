@@ -1,8 +1,10 @@
 import { ObservableV2 } from "lib0/observable";
 import * as Y from "yjs";
-import { BroadcastChannelHandler } from "./handler/broadcast-channel-handler";
-import { IndexedDbHandler } from "./handler/indexeddb-handler";
-import type { UpdateHandler } from "./handler/interface";
+import {
+	BroadcastChannelHandler,
+	IndexedDbHandler,
+	type UpdateHandler,
+} from "./handler";
 
 const INTERNAL_ORIGIN = Symbol("offline-notion-provider");
 

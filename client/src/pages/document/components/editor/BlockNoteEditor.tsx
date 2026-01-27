@@ -15,7 +15,7 @@ import { pasteHandler } from "@/pages/document/utils/paste-handler";
 import { EditorDialogProvider, useEditorDialog } from "./slash-commands";
 import { createCustomSlashMenuItems } from "./slash-commands/custom-slash-menu-items";
 // import { IndexeddbPersistence } from "y-indexeddb";
-import { OfflineNotionProvider } from "./y-provider/provider";
+import { OfflineNotionProvider } from "./y-provider";
 
 type BlockNoteEditorProps = { documentId: string };
 
