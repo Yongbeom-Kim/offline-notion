@@ -31,7 +31,28 @@ export class BroadcastChannelHandler
 		this._internalOrigin = internalOrigin;
 		this._bc = new BroadcastChannel(docId);
 		this._bc.onmessage = this._handleMessage;
+		document.addEventListener("visibilitychange", this._handleVisibilityChange);
 	}
+
+	/**
+	 * Y Awareness hsa a 30sec timeout to kill inactive clients, with
+	 * a 15sec heartbeat polling. But browser may throttle the polling in the background.
+	 * 
+	 * So on visibility change, we must refresh all states.
+	 */
+	private _handleVisibilityChange = () => {
+		if (document.visibilityState === "visible" && this._awareness) {
+			const localState = this._awareness.getLocalState();
+			if (localState !== null) {
+				this._awareness.setLocalState(localState);
+			}
+
+			const queryMessage: BroadcastChannelMessage = {
+				type: "awareness-query",
+			};
+			this._bc.postMessage(queryMessage);
+		}
+	};
 
 	registerAwareness(awareness: awarenessProtocol.Awareness): void {
 		this._awareness = awareness;
@@ -133,6 +154,7 @@ export class BroadcastChannelHandler
 		if (this._destroyed) return;
 		this._destroyed = true;
 		this._updateCallback = null;
+		document.removeEventListener("visibilitychange", this._handleVisibilityChange);
 		if (this._awareness) {
 			awarenessProtocol.removeAwarenessStates(
 				this._awareness,
