@@ -31,6 +31,7 @@
     "@tanstack/router-plugin": "^1.132.0",
     "dexie": "^4.2.1",
     "dexie-react-hooks": "^4.2.0",
+    "lib0": "^0.2.117",
     "lucide-react": "^0.561.0",
     "nitro": "npm:nitro-nightly@latest",
     "react": "^19.2.0",

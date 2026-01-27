@@ -9,12 +9,13 @@ import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 
 import { useEffect, useMemo } from "react";
-import { IndexeddbPersistence } from "y-indexeddb";
 import * as Y from "yjs";
 import { updateInternalDocumentLinks } from "@/pages/document/utils/document-link-updater";
 import { pasteHandler } from "@/pages/document/utils/paste-handler";
 import { EditorDialogProvider, useEditorDialog } from "./slash-commands";
 import { createCustomSlashMenuItems } from "./slash-commands/custom-slash-menu-items";
+// import { IndexeddbPersistence } from "y-indexeddb";
+import { OfflineNotionProvider } from "./y-provider/provider";
 
 type BlockNoteEditorProps = { documentId: string };
 
@@ -56,7 +57,6 @@ function BlockNoteEditorInner({ editor }: BlockNoteEditorInnerProps) {
 export function BlockNoteEditor({ documentId }: BlockNoteEditorProps) {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: documentId is needed to recreate doc per document
 	const doc = useMemo(() => new Y.Doc(), [documentId]);
-	console.log(documentId, doc);
 
 	const editor = useCreateBlockNote({
 		collaboration: {
@@ -68,7 +68,7 @@ export function BlockNoteEditor({ documentId }: BlockNoteEditorProps) {
 	});
 
 	useEffect(() => {
-		const persistence = new IndexeddbPersistence(`doc-${documentId}`, doc);
+		const persistence = new OfflineNotionProvider(`doc-${documentId}`, doc);
 
 		persistence.once("synced", async () => {
 			await updateInternalDocumentLinks(editor, window.location.origin);

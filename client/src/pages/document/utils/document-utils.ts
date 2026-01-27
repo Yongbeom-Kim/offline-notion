@@ -1,7 +1,8 @@
 import { type Block, BlockNoteEditor } from "@blocknote/core";
 import { yXmlFragmentToBlocks } from "@blocknote/core/yjs";
-import { IndexeddbPersistence } from "y-indexeddb";
+// import { IndexeddbPersistence } from "y-indexeddb";
 import * as Y from "yjs";
+import { OfflineNotionProvider } from "../components/editor/y-provider/provider";
 
 /**
  * Get document content as BlockNote blocks from a document ID
@@ -13,7 +14,9 @@ export const getDocumentBlocks = async (
 ): Promise<Block[]> => {
 	return new Promise((resolve, reject) => {
 		const doc = new Y.Doc();
-		const persistence = new IndexeddbPersistence(`doc-${documentId}`, doc);
+		// const persistence = new IndexeddbPersistence(`doc-${documentId}`, doc);
+		const persistence = new OfflineNotionProvider(`doc-${documentId}`, doc);
+		console.log(persistence);
 
 		const timeoutId = setTimeout(() => {
 			persistence.destroy();
