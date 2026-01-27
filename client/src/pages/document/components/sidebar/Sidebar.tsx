@@ -1,7 +1,7 @@
 import { Card, Divider, Stack, Typography } from "@mui/joy";
 import { useDocumentPageLayoutContext } from "../../layout/context/DocumentPageLayoutContext";
-import { AddDocumentButton } from "./AddDocumentButton";
-import { AddFolderButton } from "./AddFolderButton";
+import { AddDocumentButton } from "./buttons/AddDocumentButton";
+import { AddFolderButton } from "./buttons/AddFolderButton";
 import { SidebarResizeHandler } from "./resize-handler/SidebarResizer";
 import { SidebarDocumentTree } from "./SidebarDocumentTree";
 import { SidebarEditProvider } from "./SidebarEditContext";

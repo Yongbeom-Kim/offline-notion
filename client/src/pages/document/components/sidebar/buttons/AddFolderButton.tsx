@@ -1,23 +1,20 @@
 import { Button, Typography } from "@mui/joy";
-import { useNavigate } from "@tanstack/react-router";
-import { Plus } from "lucide-react";
+import { FolderPlus } from "lucide-react";
 import { useState } from "react";
 import { createNode, NodeType } from "@/integrations/db/metadata";
-import { useSidebarEdit } from "./SidebarEditContext";
+import { useSidebarEdit } from "../SidebarEditContext";
 
-export const AddDocumentButton = () => {
+export const AddFolderButton = () => {
 	const [isCreating, setIsCreating] = useState(false);
-	const navigate = useNavigate();
 	const { setEditingNodeId } = useSidebarEdit();
 
-	const handleCreateDocument = async () => {
+	const handleCreateFolder = async () => {
 		setIsCreating(true);
 		try {
-			const docId = await createNode("Untitled document", NodeType.Document);
-			setEditingNodeId(docId);
-			navigate({ to: "/docs/$docId", params: { docId } });
+			const folderId = await createNode("New Folder", NodeType.Folder);
+			setEditingNodeId(folderId);
 		} catch (error) {
-			console.error("Failed to create document:", error);
+			console.error("Failed to create folder:", error);
 		} finally {
 			setIsCreating(false);
 		}
@@ -25,7 +22,7 @@ export const AddDocumentButton = () => {
 
 	return (
 		<Button
-			onClick={handleCreateDocument}
+			onClick={handleCreateFolder}
 			variant="plain"
 			color="neutral"
 			loading={isCreating}
@@ -43,7 +40,7 @@ export const AddDocumentButton = () => {
 					color: "text.tertiary",
 				},
 			}}
-			startDecorator={<Plus size={16} />}
+			startDecorator={<FolderPlus size={16} />}
 		>
 			<Typography
 				level="body-sm"
@@ -52,7 +49,7 @@ export const AddDocumentButton = () => {
 					fontWeight: 400,
 				}}
 			>
-				Add document
+				Add folder
 			</Typography>
 		</Button>
 	);

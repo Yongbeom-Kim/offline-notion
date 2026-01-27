@@ -6,8 +6,7 @@ const MIN_SIDEBAR_WIDTH = 200;
 const MAX_SIDEBAR_WIDTH = 500;
 
 export const SidebarResizeHandle = () => {
-	const { sidebarState, setSidebarState } =
-		useDocumentPageLayoutContext();
+	const { sidebarState, setSidebarState } = useDocumentPageLayoutContext();
 	const [isResizing, setIsResizing] = useState(false);
 	const resizeRef = useRef<{
 		startX: number;
