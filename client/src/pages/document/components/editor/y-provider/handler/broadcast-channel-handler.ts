@@ -37,7 +37,7 @@ export class BroadcastChannelHandler
 	/**
 	 * Y Awareness hsa a 30sec timeout to kill inactive clients, with
 	 * a 15sec heartbeat polling. But browser may throttle the polling in the background.
-	 * 
+	 *
 	 * So on visibility change, we must refresh all states.
 	 */
 	private _handleVisibilityChange = () => {
@@ -154,7 +154,10 @@ export class BroadcastChannelHandler
 		if (this._destroyed) return;
 		this._destroyed = true;
 		this._updateCallback = null;
-		document.removeEventListener("visibilitychange", this._handleVisibilityChange);
+		document.removeEventListener(
+			"visibilitychange",
+			this._handleVisibilityChange,
+		);
 		if (this._awareness) {
 			awarenessProtocol.removeAwarenessStates(
 				this._awareness,
