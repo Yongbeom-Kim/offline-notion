@@ -2,6 +2,7 @@ import { Card, Divider, Stack, Typography } from "@mui/joy";
 import { useDocumentPageLayoutContext } from "../../layout/context/DocumentPageLayoutContext";
 import { AddDocumentButton } from "./buttons/AddDocumentButton";
 import { AddFolderButton } from "./buttons/AddFolderButton";
+import { SettingsButton } from "./buttons/SettingsButton";
 import { SidebarResizeHandler } from "./resize-handler/SidebarResizer";
 import { SidebarDocumentTree } from "./SidebarDocumentTree";
 import { SidebarEditProvider } from "./SidebarEditContext";
@@ -59,6 +60,7 @@ export const Sidebar = () => {
 							<Stack spacing={0}>
 								<AddDocumentButton />
 								<AddFolderButton />
+								<SettingsButton />
 							</Stack>
 						</Stack>
 						<SidebarResizeHandler />

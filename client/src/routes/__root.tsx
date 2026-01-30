@@ -5,6 +5,7 @@ import {
 	HeadContent,
 	Scripts,
 } from "@tanstack/react-router";
+import { GoogleProvider } from "@/integrations/google/context/google-provider";
 import appCss from "../styles.css?url";
 
 interface MyRouterContext {
@@ -56,11 +57,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
-				<CssVarsProvider defaultMode="light">
-					<CssBaseline />
-					{children}
-				</CssVarsProvider>
-				<Scripts />
+				<GoogleProvider>
+					<CssVarsProvider defaultMode="light">
+						<CssBaseline />
+						{children}
+					</CssVarsProvider>
+					<Scripts />
+				</GoogleProvider>
 			</body>
 		</html>
 	);

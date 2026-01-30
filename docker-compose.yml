@@ -29,6 +29,9 @@ services:
       - ./.env
     environment:
       DB_ADAPTER: sqlite
+  redis:
+    image: redis:8.4.0-alpine
+    restart: unless-stopped
 
 volumes:
   database:

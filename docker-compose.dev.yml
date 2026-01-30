@@ -9,7 +9,7 @@ services:
       - /app/node_modules # keep container node_modules, don't use host
       - /root/.local/share/pnpm/store # preserve pnpm store
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     environment:
       - NODE_ENV=development
 
@@ -18,7 +18,7 @@ services:
       context: ./server
       target: dev
     ports:
-      - "3001:3001"
+      - "127.0.0.1:3001:3001"
     volumes:
       - ./server:/app
       - /app/tmp
@@ -30,7 +30,12 @@ services:
       - ../.offline-notion-volumes/voidauth/config:/app/config
       - ../.offline-notion-volumes/voidauth/db:/app/db
     ports:
-      - "3002:3000"
+      - "127.0.0.1:3002:3000"
+
+  redis:
+    ports:
+      - "127.0.0.1:3003:6379"
+
 
 volumes:
   database_dev:
