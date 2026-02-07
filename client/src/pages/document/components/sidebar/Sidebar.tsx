@@ -1,10 +1,27 @@
-import { Card, Divider, Stack, Typography } from "@mui/joy";
+import { Card, Divider, IconButton, Stack, Typography } from "@mui/joy";
+import { MoreVertical } from "lucide-react";
 import { useDocumentPageLayoutContext } from "../../layout/context/DocumentPageLayoutContext";
 import { AddDocumentButton } from "./buttons/AddDocumentButton";
 import { AddFolderButton } from "./buttons/AddFolderButton";
+import { SettingsButton } from "./buttons/SettingsButton";
 import { SidebarResizeHandler } from "./resize-handler/SidebarResizer";
 import { SidebarDocumentTree } from "./SidebarDocumentTree";
 import { SidebarEditProvider } from "./SidebarEditContext";
+import { WorkspaceContextMenu } from "./workspace-context-menu/WorkspaceContextMenu";
+
+const WorkspaceTitle = () => (
+	<Typography
+		level="h3"
+		sx={{
+			px: 2,
+			py: 1,
+			color: "text.primary",
+			fontWeight: 600,
+		}}
+	>
+		Workspace
+	</Typography>
+);
 
 export const Sidebar = () => {
 	const { sidebarState } = useDocumentPageLayoutContext();
@@ -38,27 +55,19 @@ export const Sidebar = () => {
 							}}
 							data-e2e="sidebar-stack"
 						>
-							<Typography
-								level="h3"
-								sx={{
-									px: 2,
-									py: 1,
-									color: "text.primary",
-									fontWeight: 600,
-								}}
-							>
-								Workspace
-							</Typography>
-
+							<Stack direction={"row"}>
+								<WorkspaceTitle />
+								<WorkspaceContextMenu />
+							</Stack>
 							<Divider />
 
 							<SidebarDocumentTree />
-
 							<Divider />
 
 							<Stack spacing={0}>
 								<AddDocumentButton />
 								<AddFolderButton />
+								<SettingsButton />
 							</Stack>
 						</Stack>
 						<SidebarResizeHandler />

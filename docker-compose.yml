@@ -15,9 +15,14 @@ services:
     build:
       context: ./server
       target: prod
+    volumes:
+      - ../.offline-notion-volumes/backend/db:/app/db
     restart: unless-stopped
     environment:
       - NODE_ENV=production
+  redis:
+    image: redis:8.4.0-alpine
+    restart: unless-stopped
       
   voidauth: 
     image: voidauth/voidauth:latest

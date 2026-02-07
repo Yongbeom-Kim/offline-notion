@@ -10,6 +10,7 @@ import "@blocknote/mantine/style.css";
 
 import { useEffect, useMemo, useState } from "react";
 import * as Y from "yjs";
+import { useGoogleProvider } from "@/integrations/google";
 import { updateInternalDocumentLinks } from "@/pages/document/utils/document-link-updater";
 import { pasteHandler } from "@/pages/document/utils/paste-handler";
 import { getRandomCursorColor } from "@/utils/color";
@@ -73,19 +74,23 @@ function BlockNoteEditorInner({ persistence, doc }: BlockNoteEditorInnerProps) {
 }
 
 export function BlockNoteEditor({ documentId }: BlockNoteEditorProps) {
+	const { accessToken: googleDriveAccessToken } = useGoogleProvider();
+
 	// biome-ignore lint/correctness/useExhaustiveDependencies: documentId is needed to recreate doc per document
 	const doc = useMemo(() => new Y.Doc(), [documentId]);
 	const [persistence, setPersistence] =
 		useState<OfflineNotionProvider | null>();
 
 	useEffect(() => {
-		const persistence = new OfflineNotionProvider(`doc-${documentId}`, doc);
+		const persistence = new OfflineNotionProvider(`doc-${documentId}`, doc, {
+			googleDriveAccessToken,
+		});
 		setPersistence(persistence);
 
 		return () => {
 			persistence.destroy();
 		};
-	}, [documentId, doc]);
+	}, [documentId, doc, googleDriveAccessToken]);
 
 	return (
 		<EditorDialogProvider>

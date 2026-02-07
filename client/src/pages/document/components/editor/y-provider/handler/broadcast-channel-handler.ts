@@ -1,5 +1,5 @@
 import * as awarenessProtocol from "y-protocols/awareness";
-import type * as Y from "yjs";
+import * as Y from "yjs";
 import type { AwarenessHandler, UpdateHandler } from "./interface";
 
 type BroadcastChannelMessage =
@@ -20,7 +20,7 @@ export class BroadcastChannelHandler
 {
 	private _internalOrigin: symbol;
 	private _bc: BroadcastChannel;
-	private _updateCallback: ((update: Uint8Array) => void) | null = null;
+	private _doc: Y.Doc | null = null;
 	private _destroyed: boolean = false;
 	private _awareness: awarenessProtocol.Awareness | undefined;
 
@@ -63,9 +63,8 @@ export class BroadcastChannelHandler
 		this._bc.postMessage(queryMessage);
 	}
 
-	async init(_doc: Y.Doc): Promise<void> {
-		// noop - BroadcastChannel doesn't need initialization with doc state
-		return;
+	async init(doc: Y.Doc): Promise<void> {
+		this._doc = doc;
 	}
 
 	async persistUpdate(_update: Uint8Array): Promise<void> {
@@ -81,15 +80,13 @@ export class BroadcastChannelHandler
 		this._bc.postMessage(message);
 	}
 
-	onUpdateReceived(callback: (update: Uint8Array) => void): void {
-		this._updateCallback = callback;
-	}
-
 	private _handleMessage = (ev: MessageEvent<BroadcastChannelMessage>) => {
 		const message = ev.data;
 		console.log(message);
-		if (message.type === "update" && this._updateCallback) {
-			return this._updateCallback(message.payload);
+		if (message.type === "update") {
+			if (!this._doc) return;
+			Y.applyUpdate(this._doc, message.payload, this._internalOrigin);
+			return;
 		}
 		if (message.type === "awareness-query" && this._awareness) {
 			const allKnownClientIds = Array.from(this._awareness.getStates().keys());
@@ -115,7 +112,7 @@ export class BroadcastChannelHandler
 
 		console.error(`Unreachable code, BroadcastChannel message:`, {
 			message,
-			updateCallback: this._updateCallback,
+			doc: this._doc,
 			awareness: this._awareness,
 		});
 		return;
@@ -153,7 +150,7 @@ export class BroadcastChannelHandler
 	async destroy(): Promise<void> {
 		if (this._destroyed) return;
 		this._destroyed = true;
-		this._updateCallback = null;
+		this._doc = null;
 		document.removeEventListener(
 			"visibilitychange",
 			this._handleVisibilityChange,

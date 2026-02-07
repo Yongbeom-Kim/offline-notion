@@ -79,11 +79,6 @@ export class IndexedDbHandler implements UpdateHandler {
 		return;
 	}
 
-	onUpdateReceived(_callback: (update: Uint8Array) => void): void {
-		// noop
-		return;
-	}
-
 	async destroy(): Promise<void> {
 		// This gives you issues when you refresh the page.
 		// this._db.close();

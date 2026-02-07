@@ -4,11 +4,16 @@ import * as Y from "yjs";
 import {
 	type AwarenessHandler,
 	BroadcastChannelHandler,
+	GoogleDriveHandler,
 	IndexedDbHandler,
 	type UpdateHandler,
 } from "./handler";
 
 const INTERNAL_ORIGIN = Symbol("offline-notion-provider");
+
+type OfflineNotionProviderOptions = {
+	googleDriveAccessToken?: string | null;
+};
 
 export class OfflineNotionProvider extends ObservableV2<{
 	synced: () => void;
@@ -19,15 +24,20 @@ export class OfflineNotionProvider extends ObservableV2<{
 	handlers: UpdateHandler[];
 	awareness: awarenessProtocol.Awareness;
 
-	constructor(docId: string, doc: Y.Doc) {
+	constructor(docId: string, doc: Y.Doc, options: OfflineNotionProviderOptions = {}) {
 		super();
-		const indexedDbHandler = new IndexedDbHandler(docId, INTERNAL_ORIGIN);
-		const broadcastChannelHandler = new BroadcastChannelHandler(
-			docId,
-			INTERNAL_ORIGIN,
-		);
+		const handlers: UpdateHandler[] = [
+			new IndexedDbHandler(docId, INTERNAL_ORIGIN),
+			new BroadcastChannelHandler(docId, INTERNAL_ORIGIN),
+		];
 
-		this.handlers = [indexedDbHandler, broadcastChannelHandler];
+		if (options.googleDriveAccessToken) {
+			handlers.push(
+				new GoogleDriveHandler(docId, INTERNAL_ORIGIN, options.googleDriveAccessToken)
+			);
+		}
+
+		this.handlers = handlers;
 
 		this.docId = docId;
 		this.doc = doc;
@@ -42,7 +52,6 @@ export class OfflineNotionProvider extends ObservableV2<{
 			}
 		}
 
-		broadcastChannelHandler.onUpdateReceived(this.handleBroadcastUpdate);
 		this.on("error", () => this.destroy());
 
 		this.init();
@@ -76,13 +85,6 @@ export class OfflineNotionProvider extends ObservableV2<{
 		}
 	};
 
-	handleBroadcastUpdate = (update: Uint8Array) => {
-		this._writeUpdateToDoc(update);
-	};
-
-	_writeUpdateToDoc(update: Uint8Array) {
-		Y.applyUpdate(this.doc, update, INTERNAL_ORIGIN);
-	}
 
 	private _isAwarenessHandler(
 		handler: UpdateHandler,
