@@ -7,5 +7,5 @@ output "public_ipv6" {
 }
 
 output "domain" {
-  value = var.project_domain
+  value = var.project_domains
 }

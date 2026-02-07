@@ -12,8 +12,8 @@ variable "base_domain" {
   default = "yongbeom.com"
 }
 
-variable "project_domain" {
-  default = "docs.yongbeom.com"
+variable "project_domains" {
+  default = ["docs.yongbeom.com", "v1.docs.yongbeom.com"]
 }
 
 variable "public_ipv4" {
