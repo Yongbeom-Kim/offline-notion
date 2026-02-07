@@ -1,4 +1,8 @@
-{$HOSTNAME} {
+$HOSTNAME {
+	redir https://v1.{$HOSTNAME}{uri} 301
+}
+
+v1.{$HOSTNAME} {
 
     handle_path /api/* {
         reverse_proxy backend:3001
