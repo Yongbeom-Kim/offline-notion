@@ -1,6 +1,6 @@
 import { ObservableV2 } from "lib0/observable";
 import * as awarenessProtocol from "y-protocols/awareness.js";
-import * as Y from "yjs";
+import type * as Y from "yjs";
 import {
 	type AwarenessHandler,
 	BroadcastChannelHandler,
@@ -24,7 +24,11 @@ export class OfflineNotionProvider extends ObservableV2<{
 	handlers: UpdateHandler[];
 	awareness: awarenessProtocol.Awareness;
 
-	constructor(docId: string, doc: Y.Doc, options: OfflineNotionProviderOptions = {}) {
+	constructor(
+		docId: string,
+		doc: Y.Doc,
+		options: OfflineNotionProviderOptions = {},
+	) {
 		super();
 		const handlers: UpdateHandler[] = [
 			new IndexedDbHandler(docId, INTERNAL_ORIGIN),
@@ -33,7 +37,11 @@ export class OfflineNotionProvider extends ObservableV2<{
 
 		if (options.googleDriveAccessToken) {
 			handlers.push(
-				new GoogleDriveHandler(docId, INTERNAL_ORIGIN, options.googleDriveAccessToken)
+				new GoogleDriveHandler(
+					docId,
+					INTERNAL_ORIGIN,
+					options.googleDriveAccessToken,
+				),
 			);
 		}
 
@@ -84,7 +92,6 @@ export class OfflineNotionProvider extends ObservableV2<{
 			this.emit("error", [e instanceof Error ? e : new Error(String(e))]);
 		}
 	};
-
 
 	private _isAwarenessHandler(
 		handler: UpdateHandler,

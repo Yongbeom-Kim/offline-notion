@@ -1,6 +1,6 @@
-import { useGoogleProvider } from "@/integrations/google";
-import { Dropdown, IconButton, Menu, MenuButton, MenuItem } from "@mui/joy";
+import { Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
 import { MoreVertical } from "lucide-react";
+import { useGoogleProvider } from "@/integrations/google";
 
 export const WorkspaceContextMenu = () => {
 	return (
@@ -22,10 +22,10 @@ export const WorkspaceContextMenu = () => {
 };
 
 const WorkspaceContextMenuSyncStatusItem = () => {
-	const { accessToken, login } = useGoogleProvider()
+	const { accessToken, login } = useGoogleProvider();
 	// const { uploadMultipart, createFolder, getExistingFolder } = useGoogleDrive()
 	const handleClick = async () => {
-		if (!accessToken) login()
+		if (!accessToken) login();
 		// const result = await uploadMultipart(
 		// 	'test_file/test',
 		// 	'text/plain',
@@ -35,8 +35,6 @@ const WorkspaceContextMenuSyncStatusItem = () => {
 		// const folder2 = await createFolder('test', folder1)
 		// console.log(folder1, folder2)
 		// console.log(await getExistingFolder('test'))
-	}
-	return (
-		<MenuItem onClick={handleClick}>Sync Document</MenuItem>
-	)
-}
+	};
+	return <MenuItem onClick={handleClick}>Sync Document</MenuItem>;
+};

@@ -1,5 +1,4 @@
-import { Card, Divider, IconButton, Stack, Typography } from "@mui/joy";
-import { MoreVertical } from "lucide-react";
+import { Card, Divider, Stack, Typography } from "@mui/joy";
 import { useDocumentPageLayoutContext } from "../../layout/context/DocumentPageLayoutContext";
 import { AddDocumentButton } from "./buttons/AddDocumentButton";
 import { AddFolderButton } from "./buttons/AddFolderButton";

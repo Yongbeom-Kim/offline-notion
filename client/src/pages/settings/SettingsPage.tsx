@@ -1,4 +1,4 @@
-import { Box, Tab, TabList, TabPanel, Tabs, Typography } from "@mui/joy";
+import { Box, Tab, TabList, TabPanel, Tabs } from "@mui/joy";
 import { SettingsPageHeader } from "./components/header/SettingsPageHeader";
 import { BackupAndSync } from "./components/tabs/BackupAndSyncSettingsTab";
 

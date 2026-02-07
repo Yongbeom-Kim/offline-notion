@@ -1,13 +1,4 @@
-import {
-	Alert,
-	Button,
-	CircularProgress,
-	Tab,
-	TabPanel,
-	Typography,
-} from "@mui/joy";
-import { useGoogleLogin } from "@react-oauth/google";
-import { useState } from "react";
+import { Button, CircularProgress, Tab, TabPanel, Typography } from "@mui/joy";
 import { useGoogleProvider } from "@/integrations/google";
 
 const TAB_VALUE = "backup_and_sync";
@@ -27,7 +18,7 @@ const TabComponent = () => {
 };
 
 // Function to create a test file in Google Drive
-async function createTestFileInDrive(
+async function _createTestFileInDrive(
 	accessToken: string,
 ): Promise<{ id: string; name: string }> {
 	const metadata = {

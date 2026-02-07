@@ -29,7 +29,9 @@ export function debounce<T extends (...args: unknown[]) => void>(
 	return debouncedFn;
 }
 
-export function debounceWithForcedExecution<T extends (...args: unknown[]) => void>(
+export function debounceWithForcedExecution<
+	T extends (...args: unknown[]) => void,
+>(
 	fn: T,
 	delay: number,
 	maxWait: number, // clearer name

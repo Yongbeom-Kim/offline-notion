@@ -1,1 +1,1 @@
-export type GoogleFileId = string
+export type GoogleFileId = string;
