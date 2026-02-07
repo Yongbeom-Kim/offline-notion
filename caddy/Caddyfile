@@ -1,4 +1,4 @@
-$HOSTNAME {
+{$HOSTNAME} {
 	redir https://v1.{$HOSTNAME}{uri} 301
 }
 
