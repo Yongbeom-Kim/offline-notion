@@ -2,8 +2,17 @@ import axios, { type AxiosInstance } from "axios";
 
 const DEFAULT_UPLOAD_TIMEOUT_MS = 10000;
 
+function getUploadBaseURL(): string {
+	if (import.meta.env.VITE_API_BASE_URL) return import.meta.env.VITE_API_BASE_URL;
+	const origin = window.location.origin;
+	if (origin === "http://localhost:3000" || origin === "http://localhost:3001") {
+		return "http://localhost:3001";
+	}
+	return "/api";
+}
+
 const apiClient: AxiosInstance = axios.create({
-	baseURL: import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3001",
+	baseURL: getUploadBaseURL(),
 	timeout: 30000,
 });
 
