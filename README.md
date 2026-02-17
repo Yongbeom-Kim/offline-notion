@@ -1,6 +1,9 @@
 # Offline Notion
 
 Offline-First Notion Alternative
+
+Hosted [here](https://github.com/Yongbeom-Kim/servers/tree/main/yongbeom-hetzner-auction-ubuntu-2404).
+
 ## 🛠️ Tech Stack
 
 ### Frontend
