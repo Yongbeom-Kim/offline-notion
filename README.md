@@ -1,6 +1,13 @@
 # Offline Notion
 
-Offline-First Notion Alternative
+Offline-First Notion Alternative.
+<div align="center">
+  <br />
+  <img src="https://github.com/user-attachments/assets/3953db66-669c-48c4-acb8-c623120f44f5" width="75%" />
+</div>
+<br />
+<br />
+
 
 Hosted [here](https://github.com/Yongbeom-Kim/servers/tree/main/yongbeom-hetzner-auction-ubuntu-2404).
 
