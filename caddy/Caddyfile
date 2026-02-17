@@ -3,7 +3,7 @@
 }
 
 http://{$NOTION_HOSTNAME} {
-	redir //v1.{$NOTION_HOSTNAME}{uri} 301
+	redir https://v1.{$NOTION_HOSTNAME}{uri} 301
 }
 
 http://v1.{$NOTION_HOSTNAME} {
