@@ -23,11 +23,9 @@ RUN adduser -S appuser
 WORKDIR /app
 EXPOSE 3000
 
-COPY --from=build /app/package.json ./package.json
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/.output ./.output
-
-RUN chown -R appuser /app
+COPY --from=build --chown=appuser:appuser /app/package.json ./package.json
+COPY --from=build --chown=appuser:appuser /app/node_modules ./node_modules
+COPY --from=build --chown=appuser:appuser /app/.output ./.output
 
 USER appuser
 
