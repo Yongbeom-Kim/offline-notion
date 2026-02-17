@@ -22,7 +22,7 @@ Offline-First Notion Alternative
 |------------|---------|
 | [Go](https://go.dev/) | Backend server |
 | [VoidAuth](https://github.com/voidauth/voidauth) | Authentication |
-| [Caddy](https://caddyserver.com/) | Reverse proxy with automatic HTTPS |
+| [Caddy](https://caddyserver.com/) | Reverse proxy (HTTP only; TLS terminated at edge) |
 
 ### Infrastructure
 | Technology | Purpose |

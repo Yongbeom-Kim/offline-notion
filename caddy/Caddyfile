@@ -1,9 +1,12 @@
-{$HOSTNAME} {
-	redir https://v1.{$HOSTNAME}{uri} 301
+{
+	auto_https off
 }
 
-v1.{$HOSTNAME} {
+http://{$HOSTNAME} {
+	redir //v1.{$HOSTNAME}{uri} 301
+}
 
+http://v1.{$HOSTNAME} {
     handle_path /api/* {
         reverse_proxy backend:3001
     }
