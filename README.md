@@ -1,6 +1,6 @@
 # Offline Notion
 
-Offline-First Notion Alternative.
+Offline-First Notion Alternative @ [notion.yongbeom.net](https://notion.yongbeom.net).
 <div align="center">
   <br />
   <img src="https://github.com/user-attachments/assets/3953db66-669c-48c4-acb8-c623120f44f5" width="75%" />
