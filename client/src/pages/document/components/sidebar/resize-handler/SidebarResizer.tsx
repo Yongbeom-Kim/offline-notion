@@ -5,7 +5,7 @@ import { useDocumentPageLayoutContext } from "@/pages/document/layout/context/Do
 const MIN_SIDEBAR_WIDTH = 200;
 const MAX_SIDEBAR_WIDTH = 500;
 
-// TODO: Performance Sucks (https://docs.yongbeom.com/docs/019bf109-bc3d-732c-88f1-d8607460cfff)
+// TODO: Performance Sucks (https://notion.yongbeom.net/docs/019bf109-bc3d-732c-88f1-d8607460cfff)
 // Update DOM live, and then call setState at the end once only.
 // TODO: accessibility + keyboard nav
 export const SidebarResizeHandler = () => {

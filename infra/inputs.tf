@@ -13,7 +13,7 @@ variable "base_domain" {
 }
 
 variable "project_domains" {
-  default = ["docs.yongbeom.com", "v1.docs.yongbeom.com"]
+  default = ["notion.yongbeom.net", "v1.notion.yongbeom.net"]
 }
 
 variable "public_ipv4" {

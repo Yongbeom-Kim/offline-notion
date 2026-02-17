@@ -42,8 +42,8 @@ jobs:
       - name: 'Create env file'
         run: |
           touch .env
-          echo HOSTNAME=docs.yongbeom.com >> .env
-          echo APP_URL=https://docs.yongbeom.com/auth >> .env
+          echo HOSTNAME=notion.yongbeom.net >> .env
+          echo APP_URL=https://notion.yongbeom.net/auth >> .env
           echo STORAGE_KEY=${{ secrets.STORAGE_KEY }} >> .env
           cat .env
 
